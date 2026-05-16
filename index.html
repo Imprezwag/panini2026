@@ -44,7 +44,6 @@
     .est-row:last-child { border-bottom: none; font-weight: 700; }
     .est-lbl { color: #666; }
 
-    /* Search */
     .search-wrap { position: relative; margin-bottom: 12px; }
     .search-input { width: 100%; padding: 10px 36px; font-size: 14px; border: 2px solid #ddd; border-radius: 8px; background: #fff; color: #111; outline: none; }
     .search-input:focus { border-color: #1D9E75; }
@@ -52,7 +51,6 @@
     .search-clear { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: #ccc; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 11px; cursor: pointer; color: #fff; font-weight: 700; display: none; align-items: center; justify-content: center; }
     .search-clear.vis { display: flex; }
 
-    /* Sel grid */
     .sgrid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
     .selcard { background: #fff; border: 2px solid #ddd; border-radius: 8px; padding: 10px; cursor: pointer; }
     .selcard.done { border-color: #1D9E75; background: #edfaf4; }
@@ -62,9 +60,7 @@
     .selfill { height: 100%; background: #1D9E75; border-radius: 2px; }
 
     .spcard { background: #fff; border: 2px solid #ddd; border-radius: 10px; margin-bottom: 8px; cursor: pointer; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; }
-    .spcard:active { background: #f5f5f5; }
 
-    /* Fig panel */
     .figpanel { background: #fff; border: 2px solid #ddd; border-radius: 10px; overflow: hidden; margin-bottom: 14px; }
     .fighdr { padding: 10px 12px; border-bottom: 2px solid #eee; display: flex; align-items: center; gap: 8px; background: #fff; }
     .btn-dark { background: #333; border: none; border-radius: 6px; color: #fff; font-size: 13px; font-weight: 700; padding: 6px 10px; cursor: pointer; }
@@ -77,7 +73,6 @@
     .rbadge { font-size: 10px; color: #bbb; cursor: pointer; padding: 1px 4px; border-radius: 4px; border: 1px solid transparent; }
     .rbadge.hr { color: #7a4500; background: #fef0d8; border-color: #e09000; font-weight: 700; }
 
-    /* Sobres */
     .sobrow { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
     .sobrow:last-child { border-bottom: none; }
     .cctrl { display: flex; align-items: center; gap: 10px; }
@@ -100,10 +95,8 @@
     .reg-del { background: none; border: none; color: #ccc; font-size: 16px; cursor: pointer; padding: 2px 6px; }
     .empty-msg { padding: 20px; text-align: center; color: #bbb; font-size: 13px; }
 
-    /* Listas */
     .lista-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden; margin-bottom: 12px; }
     .lista-hdr { padding: 13px 14px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; background: #f9f9f9; }
-    .lista-hdr:active { background: #f0f0f0; }
     .lista-badge { font-size: 12px; color: #666; background: #e8e8e8; border-radius: 10px; padding: 2px 8px; }
     .lista-arrow { font-size: 12px; color: #aaa; transition: transform 0.2s; }
     .lista-arrow.open { transform: rotate(90deg); }
@@ -116,19 +109,26 @@
     .chip-rep { font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 10px; background: #fef0d8; border: 1px solid #e09000; color: #7a4500; }
     .export-btn { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; margin-top: 12px; padding: 10px; background: #333; color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; }
     .export-area { width: 100%; margin-top: 8px; padding: 10px; font-size: 11px; font-family: monospace; border: 1px solid #ddd; border-radius: 6px; background: #f9f9f9; color: #111; resize: vertical; min-height: 100px; display: none; }
-
     .no-results { text-align: center; padding: 30px; color: #999; font-size: 14px; }
 
-    /* Toast */
+    /* Backup section */
+    .backup-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 10px; padding: 14px; margin-bottom: 12px; }
+    .backup-title { font-size: 14px; font-weight: 700; color: #111; margin-bottom: 4px; }
+    .backup-sub { font-size: 12px; color: #888; margin-bottom: 12px; }
+    .backup-btn { width: 100%; padding: 11px; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; margin-bottom: 8px; }
+    .backup-btn.export { background: #1D9E75; color: #fff; }
+    .backup-btn.import { background: #f0f0f0; color: #111; border: 2px solid #ddd; }
+    .backup-textarea { width: 100%; padding: 10px; font-size: 12px; font-family: monospace; border: 2px solid #ddd; border-radius: 8px; background: #f9f9f9; color: #111; resize: vertical; min-height: 80px; margin-top: 8px; display: none; }
+    .backup-textarea.vis { display: block; }
+    .backup-confirm { width: 100%; padding: 10px; background: #1D9E75; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 8px; display: none; }
+    .backup-confirm.vis { display: block; }
+
     .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #1D9E75; color: #fff; font-size: 13px; padding: 9px 22px; border-radius: 20px; opacity: 0; transition: opacity 0.25s; pointer-events: none; z-index: 9999; white-space: nowrap; box-shadow: 0 2px 12px rgba(0,0,0,0.2); }
     .toast.show { opacity: 1; }
     .toast.err { background: #c0392b; }
 
-    /* Install banner */
-    #install-banner { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #1D9E75; color: #fff; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.15); }
-    #install-banner p { font-size: 13px; font-weight: 600; }
-    #install-banner small { font-size: 11px; opacity: 0.85; }
-    .install-btn { background: #fff; color: #1D9E75; border: none; border-radius: 20px; padding: 8px 16px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+    #install-banner { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #1D9E75; color: #fff; padding: 12px 16px; align-items: center; justify-content: space-between; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.15); }
+    .install-btn { background: #fff; color: #1D9E75; border: none; border-radius: 20px; padding: 8px 16px; font-size: 13px; font-weight: 700; cursor: pointer; }
     .install-close { background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; padding: 0 0 0 12px; opacity: 0.8; }
   </style>
 </head>
@@ -166,6 +166,19 @@
         <div class="est-row"><span class="est-lbl">Fig. nuevas por sobre</span><span id="e-prom">-</span></div>
         <div class="est-row"><span class="est-lbl">Sobres que faltan (est.)</span><span id="e-falt">-</span></div>
       </div>
+      <div class="sec">Backup</div>
+      <div class="backup-card">
+        <div class="backup-title">Exportar datos</div>
+        <div class="backup-sub">Guardá una copia de tu progreso</div>
+        <button class="backup-btn export" onclick="exportarBackup()">📤 Exportar y copiar</button>
+        <textarea class="backup-textarea" id="ta-export" readonly></textarea>
+
+        <div class="backup-title" style="margin-top:14px">Importar datos</div>
+        <div class="backup-sub">Restaurá desde una copia anterior</div>
+        <button class="backup-btn import" onclick="mostrarImport()">📥 Importar datos</button>
+        <textarea class="backup-textarea" id="ta-import" placeholder="Pegá acá el texto exportado anteriormente..."></textarea>
+        <button class="backup-confirm" id="btn-confirm-import" onclick="confirmarImport()">✓ Confirmar importación</button>
+      </div>
     </div>
 
     <!-- ALBUM -->
@@ -187,7 +200,7 @@
         <div id="body-faltan" style="display:none">
           <div class="lista-body" id="content-faltan"></div>
           <div style="padding:0 14px 14px">
-            <button class="export-btn" onclick="exportar('faltan')">📋 Copiar lista al portapapeles</button>
+            <button class="export-btn" onclick="exportarLista('faltan')">📋 Copiar lista al portapapeles</button>
             <textarea class="export-area" id="ta-faltan" readonly></textarea>
           </div>
         </div>
@@ -203,7 +216,7 @@
         <div id="body-rep" style="display:none">
           <div class="lista-body" id="content-rep"></div>
           <div style="padding:0 14px 14px">
-            <button class="export-btn" onclick="exportar('rep')">📋 Copiar lista al portapapeles</button>
+            <button class="export-btn" onclick="exportarLista('rep')">📋 Copiar lista al portapapeles</button>
             <textarea class="export-area" id="ta-rep" readonly></textarea>
           </div>
         </div>
@@ -250,9 +263,8 @@
 </div>
 
 <div class="toast" id="toast"></div>
-
-<div id="install-banner" style="display:none">
-  <div><p>Instalar como app</p><small>Funciona offline y sin navegador</small></div>
+<div id="install-banner">
+  <div><p style="font-size:13px;font-weight:600">Instalar como app</p><small style="font-size:11px;opacity:0.85">Funciona offline y sin navegador</small></div>
   <button class="install-btn" id="install-btn">Instalar</button>
   <button class="install-close" onclick="document.getElementById('install-banner').style.display='none'">✕</button>
 </div>
@@ -314,15 +326,51 @@ function renderAll(){
   document.getElementById('e-tot').textContent=tot;
   document.getElementById('cnt-comp').textContent=comp;
   document.getElementById('cnt-tot').textContent=tot;
-  const fps=tot*5;
-  if(fps>0&&s.tengo>0){const p=s.tengo/fps;document.getElementById('e-prom').textContent=p.toFixed(2);document.getElementById('e-falt').textContent=Math.ceil(s.faltan/p)+' sobres';}
-  else{document.getElementById('e-prom').textContent='-';document.getElementById('e-falt').textContent='-';}
+
+  // FÓRMULA CORREGIDA: figuritas nuevas = (tengo - repetidas) / sobres
+  const nuevas = s.tengo - s.rep;
+  const prom = tot > 0 && nuevas > 0 ? nuevas / tot : null;
+  if(prom){
+    document.getElementById('e-prom').textContent=prom.toFixed(2);
+    document.getElementById('e-falt').textContent=Math.ceil(s.faltan/prom)+' sobres';
+  } else {
+    document.getElementById('e-prom').textContent='-';
+    document.getElementById('e-falt').textContent='-';
+  }
+
   renderAlbum();renderRegaladores();updateBadges();
   if(listaOpen.faltan)renderListaFaltan();
   if(listaOpen.rep)renderListaRep();
 }
 
-// LISTAS
+// ── BACKUP ───────────────────────────────────────────────────────────────────
+function exportarBackup(){
+  const data=JSON.stringify({figs:ST.figs,reps:ST.reps,sobres:ST.sobres,regaladores:ST.regaladores});
+  const ta=document.getElementById('ta-export');
+  ta.value=data;ta.classList.add('vis');ta.select();
+  try{
+    navigator.clipboard.writeText(data).then(()=>showToast('Datos copiados ✓')).catch(()=>showToast('Seleccioná el texto y copiá manualmente'));
+  }catch(e){try{document.execCommand('copy');showToast('Datos copiados ✓');}catch(_){showToast('Seleccioná el texto y copiá manualmente');}}
+}
+
+function mostrarImport(){
+  const ta=document.getElementById('ta-import'),btn=document.getElementById('btn-confirm-import');
+  ta.classList.add('vis');btn.classList.add('vis');ta.focus();
+}
+
+function confirmarImport(){
+  const ta=document.getElementById('ta-import');
+  try{
+    const p=JSON.parse(ta.value.trim());
+    if(!p||typeof p.figs!=='object') throw new Error('Formato inválido');
+    ST.figs=p.figs||{};ST.reps=p.reps||{};ST.sobres=p.sobres||{comprados:0};ST.regaladores=p.regaladores||[];
+    save();
+    ta.classList.remove('vis');document.getElementById('btn-confirm-import').classList.remove('vis');ta.value='';
+    showToast('Datos importados ✓');renderAll();
+  }catch(e){showToast('Error: el texto no es válido',1);}
+}
+
+// ── LISTAS ───────────────────────────────────────────────────────────────────
 function buildFaltantes(){
   const res=[];ALL_SELS.forEach(code=>{const n=getN(code),nums=[];for(let i=1;i<=n;i++)if(!ST.figs[kk(code,i)])nums.push(i);if(nums.length)res.push({code,name:getName(code),nums});});return res;
 }
@@ -351,7 +399,7 @@ function renderListaRep(){
   if(!rep.length){el.innerHTML='<div class="empty-msg">No tenés repetidas todavía.</div>';return;}
   el.innerHTML=rep.map(({code,name,items})=>'<div class="lista-sel-block"><div class="lista-sel-name">'+code+' — '+esc(name)+'</div><div class="chips">'+items.map(({num,cant})=>'<span class="chip-rep">'+num+(cant>1?' ×'+cant:'')+'</span>').join('')+'</div></div>').join('');
 }
-function exportar(tipo){
+function exportarLista(tipo){
   const ta=document.getElementById('ta-'+tipo);
   let txt='';
   if(tipo==='faltan'){
@@ -366,7 +414,7 @@ function exportar(tipo){
   catch(e){try{document.execCommand('copy');showToast('Lista copiada ✓');}catch(_){showToast('Seleccioná y copiá manualmente');}}
 }
 
-// ALBUM
+// ── ALBUM ────────────────────────────────────────────────────────────────────
 function renderAlbum(){
   const c=document.getElementById('album-content');
   if(act){renderFigs(c,act);return;}
@@ -419,7 +467,7 @@ function tog(sel,num){
 }
 function addR(sel,num){const key=kk(sel,num);if(!ST.figs[key])return;ST.reps[key]=(ST.reps[key]||0)+1;save();renderFigs(document.getElementById('album-content'),sel);updateBadges();}
 
-// SOBRES
+// ── SOBRES ───────────────────────────────────────────────────────────────────
 function chgComp(d){ST.sobres.comprados=Math.max(0,(ST.sobres.comprados||0)+d);save();renderAll();}
 function chgRegInput(d){regCant=Math.max(1,regCant+d);document.getElementById('reg-cant').textContent=regCant;}
 function agregarRegalo(){
@@ -455,22 +503,10 @@ function setTab(tab){
   if(tab==='listas')updateBadges();
 }
 
-// PWA install
 let deferredPrompt=null;
-window.addEventListener('beforeinstallprompt',e=>{
-  e.preventDefault();deferredPrompt=e;
-  document.getElementById('install-banner').style.display='flex';
-});
-document.getElementById('install-btn').addEventListener('click',async()=>{
-  if(!deferredPrompt)return;
-  deferredPrompt.prompt();const r=await deferredPrompt.userChoice;
-  if(r.outcome==='accepted')document.getElementById('install-banner').style.display='none';
-  deferredPrompt=null;
-});
-
-if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
-}
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;document.getElementById('install-banner').style.display='flex';});
+document.getElementById('install-btn').addEventListener('click',async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();const r=await deferredPrompt.userChoice;if(r.outcome==='accepted')document.getElementById('install-banner').style.display='none';deferredPrompt=null;});
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));}
 
 load();
 </script>
