@@ -156,6 +156,8 @@
         <div class="scard"><div class="slbl">Me faltan</div><div class="sval" id="s-faltan">993</div><div class="ssub">figuritas</div></div>
         <div class="scard"><div class="slbl">Repetidas</div><div class="sval" id="s-rep">0</div><div class="ssub">total</div></div>
         <div class="scard"><div class="slbl">Sels. completas</div><div class="sval" id="s-sels">0</div><div class="ssub">de 48</div></div>
+        <div class="scard"><div class="slbl">Recibidas (intercambio)</div><div class="sval" id="s-irecib">0</div><div class="ssub">figuritas</div></div>
+        <div class="scard"><div class="slbl">Dadas (intercambio)</div><div class="sval" id="s-idad">0</div><div class="ssub">figuritas</div></div>
       </div>
       <div class="sec">Estimacion</div>
       <div class="card">
@@ -304,7 +306,7 @@ const ALL_SELS=[...SELS,'FWC','CC'];
 // FWC: 20 figuritas numeradas 00-19 (índice 0=00, índice 1=1 ... 19=19)
 const FN=20,CN=14,SN=20,TOT=994,LS='panini2026_data';
 function fwcNum(i){return i===0?'00':String(i);}
-let ST={figs:{},reps:{},sobres:{comprados:0},regaladores:[]};
+let ST={figs:{},reps:{},sobres:{comprados:0},regaladores:[],intercambios:{recibidas:0,dadas:0}};
 let act=null,tt=null,query='',regCant=1;
 let listaOpen={faltan:false,rep:false,intercambio:false};
 
@@ -316,7 +318,7 @@ function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').repl
 function load(){
   try{
     const r=localStorage.getItem(LS);
-    if(r){const p=JSON.parse(r);if(p){ST.figs=p.figs||{};ST.reps=p.reps||{};ST.sobres=p.sobres||{comprados:0};ST.regaladores=p.regaladores||[];if(typeof ST.sobres.regalados==='number')delete ST.sobres.regalados;}}
+    if(r){const p=JSON.parse(r);if(p){ST.figs=p.figs||{};ST.reps=p.reps||{};ST.sobres=p.sobres||{comprados:0};ST.regaladores=p.regaladores||[];ST.intercambios=p.intercambios||{recibidas:0,dadas:0};if(typeof ST.sobres.regalados==='number')delete ST.sobres.regalados;}}
   }catch(e){showToast('Error al cargar',1);}
   renderAll();
 }
@@ -351,14 +353,18 @@ function renderAll(){
   document.getElementById('s-faltan').textContent=s.faltan;
   document.getElementById('s-rep').textContent=s.rep;
   document.getElementById('s-sels').textContent=s.ok;
+  document.getElementById('s-irecib').textContent=ST.intercambios.recibidas||0;
+  document.getElementById('s-idad').textContent=ST.intercambios.dadas||0;
+  document.getElementById('s-irecib').textContent=ST.intercambios.recibidas||0;
+  document.getElementById('s-idad').textContent=ST.intercambios.dadas||0;
   document.getElementById('e-comp').textContent=comp;
   document.getElementById('e-reg').textContent=reg;
   document.getElementById('e-tot').textContent=tot;
   document.getElementById('cnt-comp').textContent=comp;
   document.getElementById('cnt-tot').textContent=tot;
 
-  const nuevas=s.tengo-s.rep;
-  const prom=tot>0&&nuevas>0?nuevas/tot:null;
+  const porSobre=s.tengo-(ST.intercambios.recibidas||0);
+  const prom=tot>0&&porSobre>0?porSobre/tot:null;
   if(prom){
     document.getElementById('e-prom').textContent=prom.toFixed(2);
     document.getElementById('e-falt').textContent=Math.ceil(s.faltan/prom)+' sobres';
@@ -522,6 +528,114 @@ function renderRegaladores(){
   el.innerHTML=h;
 }
 
+
+// ── SUGERIDO DE INTERCAMBIO ───────────────────────────────────────────────────
+function valorFig(code, num){
+  // FWC todas valen mas
+  if(code==='FWC') return 3;
+  // CC mas raras que seleccion comun
+  if(code==='CC') return 2;
+  // #1 de cada seleccion es escudo brillante
+  if(num===1) return 2;
+  return 1;
+}
+
+function generarSugerido(amigoFaltan, amigoRepite){
+  const misReps=buildRepetidas();
+  const misFaltan=buildFaltantes();
+
+  // Lo que puedo darle (mis repetidas que el necesita)
+  const puedoDar=[];
+  misReps.forEach(({code,items})=>{
+    if(!amigoFaltan[code]) return;
+    const aFaltan=amigoFaltan[code].map(x=>x.num);
+    items.forEach(({num,lbl})=>{
+      if(aFaltan.includes(num)) puedoDar.push({code,num,lbl:lbl||String(num),val:valorFig(code,num)});
+    });
+  });
+
+  // Lo que me puede dar (sus repetidas que yo necesito)
+  const puedoPedir=[];
+  misFaltan.forEach(({code,nums})=>{
+    if(!amigoRepite[code]) return;
+    const aRepite=amigoRepite[code].map(x=>x.num);
+    const n=getN(code);const start=code==='FWC'?0:1;const end=code==='FWC'?FN-1:n;
+    for(let i=start;i<=end;i++){
+      if(!ST.figs[kk(code,i)]&&aRepite.includes(i)){
+        const lbl=code==='FWC'?fwcNum(i):String(i);
+        puedoPedir.push({code,num:i,lbl,val:valorFig(code,i)});
+      }
+    }
+  });
+
+  // Ordenar por valor descendente para priorizar especiales
+  puedoDar.sort((a,b)=>b.val-a.val);
+  puedoPedir.sort((a,b)=>b.val-a.val);
+
+  // Armar sugerencia: intentar emparejar por valor similar
+  // Agrupar por valor
+  const darPorVal={1:[],2:[],3:[]};
+  const pedirPorVal={1:[],2:[],3:[]};
+  puedoDar.forEach(f=>darPorVal[f.val].push(f));
+  puedoPedir.forEach(f=>pedirPorVal[f.val].push(f));
+
+  const sugerenciaDar=[];
+  const sugerenciaPedir=[];
+
+  // Match FWC x FWC (val 3)
+  const minFWC=Math.min(darPorVal[3].length,pedirPorVal[3].length);
+  for(let i=0;i<minFWC;i++){sugerenciaDar.push(darPorVal[3][i]);sugerenciaPedir.push(pedirPorVal[3][i]);}
+
+  // Match especiales x especiales (val 2: CC y #1)
+  const minEsp=Math.min(darPorVal[2].length,pedirPorVal[2].length);
+  for(let i=0;i<minEsp;i++){sugerenciaDar.push(darPorVal[2][i]);sugerenciaPedir.push(pedirPorVal[2][i]);}
+
+  // Match comunes x comunes (val 1)
+  const minCom=Math.min(darPorVal[1].length,pedirPorVal[1].length);
+  for(let i=0;i<minCom;i++){sugerenciaDar.push(darPorVal[1][i]);sugerenciaPedir.push(pedirPorVal[1][i]);}
+
+  return{dar:sugerenciaDar,pedir:sugerenciaPedir,todoDar:puedoDar,todoPedir:puedoPedir};
+}
+
+function getFlagName(code){return NAMES[code]||code;}
+
+function formatSugeridoWhatsApp(dar,pedir){
+  if(!dar.length&&!pedir.length) return null;
+
+  // Group by code
+  const agrupar=(arr)=>{
+    const map={};
+    arr.forEach(({code,lbl})=>{
+      if(!map[code]) map[code]=[];
+      map[code].push(lbl);
+    });
+    return map;
+  };
+
+  const darAgrup=agrupar(dar);
+  const pedirAgrup=agrupar(pedir);
+
+  let txt='🤝 *Intercambio sugerido*\n\n';
+  txt+='📤 *Te doy:*\n';
+  if(Object.keys(darAgrup).length){
+    Object.entries(darAgrup).forEach(([code,nums])=>{
+      txt+=getFlagName(code)+': '+nums.join(', ')+'\n';
+    });
+  } else {
+    txt+='(ninguna en este grupo)\n';
+  }
+  txt+='\n📥 *Me das:*\n';
+  if(Object.keys(pedirAgrup).length){
+    Object.entries(pedirAgrup).forEach(([code,nums])=>{
+      txt+=getFlagName(code)+': '+nums.join(', ')+'\n';
+    });
+  } else {
+    txt+='(ninguna en este grupo)\n';
+  }
+  txt+='\n_Generado con Album Mundial 2026_';
+  return txt;
+}
+
 // ── INTERCAMBIO ──────────────────────────────────────────────────────────────
 function generarBloqueIntercambio(){
   const faltan=buildFaltantes(),reps=buildRepetidas();
@@ -540,9 +654,9 @@ function cruzarLista(){
   if(!raw){el.innerHTML='<div class="empty-msg">Pegá el bloque de tu amigo primero.</div>';return;}
   try{
     const lines=raw.split('\n');
-    // Detect Figuritas App format
-    const isFiguritasApp=lines.some(l=>l.startsWith('Figuritas App'));
-    if(isFiguritasApp){
+    // Detect external app format (Figuritas App or similar)
+    const isExternalApp=lines.some(l=>l.startsWith('Figuritas App'))||lines.some(l=>/^(Me faltan|Repetidas|Me Faltan)$/i.test(l))||lines.some(l=>/^FWC\s/.test(l)&&l.includes(':'));
+    if(isExternalApp){
       cruzarListaFiguritasApp(raw,el);return;
     }
     if(!lines[0].trim().startsWith('PANINI2026')) throw new Error('formato');
@@ -605,6 +719,20 @@ function cruzarLista(){
     if(posibles>0){
       h+='<div style="margin-top:12px;padding:10px;background:#edfaf4;border-radius:8px;font-size:13px;color:#0F6E56;font-weight:700;text-align:center">Tapeá cada figurita para confirmar el intercambio ('+posibles+' posible'+(posibles!==1?'s':'')+')</div>';
     }
+    // Sugerido
+    const amigoFalt2={},amigoRep2={};
+    Object.entries(amigoFaltan).forEach(([c,v])=>{amigoFalt2[c]=v;});
+    Object.entries(amigoRepite).forEach(([c,v])=>{amigoRep2[c]=v;});
+    const sug2=generarSugerido(amigoFalt2,amigoRep2);
+    const txt2=formatSugeridoWhatsApp(sug2.dar,sug2.pedir);
+    if(txt2){
+      h+='<div style="border-top:1px solid #eee;margin-top:14px;padding-top:12px">';
+      h+='<div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:6px">💬 Sugerido para WhatsApp</div>';
+      h+='<div style="font-size:11px;color:#666;margin-bottom:8px">Basado en valor (FWC, especiales #1, CC y comunes por separado)</div>';
+      h+='<textarea id="ta-sugerido" readonly style="width:100%;padding:10px;font-size:12px;border:1px solid #ddd;border-radius:8px;background:#f9f9f9;color:#111;resize:none;min-height:120px;box-sizing:border-box">'+esc(txt2)+'</textarea>';
+      h+='<button class="export-btn" style="margin-top:8px" onclick="copiarSugerido()">📋 Copiar mensaje</button>';
+      h+='</div>';
+    }
     el.innerHTML=h;
   }catch(e){
     el.innerHTML='<div class="empty-msg" style="color:#c0392b">El bloque no tiene el formato correcto.</div>';
@@ -616,6 +744,7 @@ function cruzarLista(){
 const FIGURITAS_MAP={'MEX':'MEX','RSA':'RSA','KOR':'KOR','CZE':'CZE','CAN':'CAN','BIH':'BIH','QAT':'QAT','SUI':'SUI','BRA':'BRA','MAR':'MAR','HAI':'HAI','SCO':'SCO','USA':'USA','PAR':'PAR','AUS':'AUS','TUR':'TUR','GER':'GER','CUW':'CUW','CIV':'CIV','ECU':'ECU','NED':'NED','JPN':'JPN','SWE':'SWE','TUN':'TUN','BEL':'BEL','EGY':'EGY','IRN':'IRN','NZL':'NZL','ESP':'ESP','CPV':'CPV','KSA':'KSA','URU':'URU','FRA':'FRA','SEN':'SEN','IRQ':'IRQ','NOR':'NOR','ARG':'ARG','ALG':'ALG','AUT':'AUT','JOR':'JOR','POR':'POR','COD':'COD','UZB':'UZB','COL':'COL','ENG':'ENG','CRO':'CRO','GHA':'GHA','PAN':'PAN','FWC':'FWC','CC':'CC'};
 
 function parseFiguritasLine(line){
+  // Matches "MEX 🇲🇽: 1, 2, 3" or "FWC 🏆: 1, 2" or "FWC 🌎: 5, 6"
   const m=line.match(/^([A-Z]+)[^:]*:\s*(.+)$/);
   if(!m) return null;
   const code=FIGURITAS_MAP[m[1].trim()];
@@ -633,10 +762,21 @@ function cruzarListaFiguritasApp(raw,el){
   let section=null;
   for(const line of lines){
     if(/^me faltan$/i.test(line)){section='faltan';continue;}
-    if(/^repetidas$/i.test(line)){section='rep';continue;}
+    if(/^repetidas?$/i.test(line)){section='rep';continue;}
     if(!section) continue;
     const parsed=parseFiguritasLine(line);
     if(!parsed) continue;
+    // FWC subgroups (🏆, 🌎, 📜) all map to FWC - merge nums
+    if(parsed.code==='FWC'){
+      if(section==='faltan'){
+        amigoFaltan['FWC']=amigoFaltan['FWC']||[];
+        amigoFaltan['FWC'].push(...parsed.nums.map(n=>({num:n})));
+      } else {
+        amigoRepite['FWC']=amigoRepite['FWC']||[];
+        amigoRepite['FWC'].push(...parsed.nums.map(n=>({num:n,cant:1})));
+      }
+      continue;
+    }
     if(section==='faltan') amigoFaltan[parsed.code]=parsed.nums.map(n=>({num:n}));
     else amigoRepite[parsed.code]=parsed.nums.map(n=>({num:n,cant:1}));
   }
@@ -661,7 +801,11 @@ function cruzarListaFiguritasApp(raw,el){
   if(!puedoDarle.length&&!puedoPedirle.length){
     el.innerHTML='<div class="empty-msg">No hay intercambios posibles con esta persona.</div>';return;
   }
-  let h='<div style="font-size:11px;color:#1D9E75;font-weight:600;margin-bottom:8px">Lista detectada: formato Figuritas App ✓</div>';
+  // Generate sugerido
+  const sug=generarSugerido(amigoFaltan,amigoRepite);
+  const txtWhatsApp=formatSugeridoWhatsApp(sug.dar,sug.pedir);
+
+  let h='<div style="font-size:11px;color:#1D9E75;font-weight:600;margin-bottom:8px">Lista detectada: formato externo ✓</div>';
   if(puedoPedirle.length){
     h+='<div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:6px">Te puede dar</div><div class="lista-sel-block"><div class="chips">';
     puedoPedirle.forEach(({code,rawNums})=>{rawNums.forEach(n=>{const lbl=code==='FWC'?fwcNum(n):n;h+='<span class="chip-falta" style="cursor:pointer" onclick="confirmarRecibir(this,\''+code+'\','+n+')" title="Tap para confirmar que la recibiste">'+code+' '+lbl+' ✓?</span>';});});
@@ -680,19 +824,25 @@ function cruzarListaFiguritasApp(raw,el){
 function confirmarDar(el,code,num){
   const key=kk(code,num),r=ST.reps[key]||0;
   if(r<=0){showToast('Ya no tenés repetidas de esta',1);return;}
-  ST.reps[key]=r-1;save();
+  ST.reps[key]=r-1;
+  ST.intercambios.dadas=(ST.intercambios.dadas||0)+1;
+  save();
   el.style.background='#bbb';el.style.color='#fff';el.style.pointerEvents='none';
   el.textContent=el.textContent.replace(' ✓?',' ✓');
   showToast('Repetida descontada ✓');updateBadges();
+  document.getElementById('s-idad').textContent=ST.intercambios.dadas;
 }
 
 function confirmarRecibir(el,code,num){
-  const key=kk(code,num);ST.figs[key]=true;save();
+  const key=kk(code,num);ST.figs[key]=true;
+  ST.intercambios.recibidas=(ST.intercambios.recibidas||0)+1;
+  save();
   el.style.background='#1D9E75';el.style.color='#fff';el.style.pointerEvents='none';
   el.textContent=el.textContent.replace(' ✓?',' ✓');
   showToast('Figurita marcada como conseguida ✓');
   const s=calc(),pct=Math.round(s.tengo/TOT*100);
   document.getElementById('hdr-sub').textContent=s.tengo+' de '+TOT+' · '+pct+'%';
+  document.getElementById('s-irecib').textContent=ST.intercambios.recibidas;
   updateBadges();
 }
 
