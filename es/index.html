@@ -284,7 +284,7 @@
       </div>
       <div class="sec">Regalados por persona</div>
       <div class="reg-card" id="regaladores-list"></div>
-      <p style="font-size:12px;color:#999;text-align:center;margin-bottom:14px">Cada sobre trae 5 figuritas.</p>
+      <p style="font-size:12px;color:#999;text-align:center;margin-bottom:14px">Cada sobre trae 7 figuritas.</p>
     </div>
 
   </div>
@@ -589,13 +589,13 @@ function cruzarLista(){
     if(puedoPedirle.length){
       h+='<div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:6px">Te puede dar</div>';
       h+='<div class="lista-sel-block"><div class="chips">';
-      puedoPedirle.forEach(({code,nums})=>{nums.forEach(n=>{h+='<span class="chip-falta">'+code+' '+n+'</span>';});});
+      puedoPedirle.forEach(({code,nums})=>{nums.forEach(n=>{const rawN=code==='FWC'?(n==='00'?0:parseInt(n)):n;h+='<span class="chip-falta" style="cursor:pointer" onclick="confirmarRecibir(this,''+code+'','+rawN+')" title="Tap para confirmar que la recibiste">'+code+' '+n+' ✓?</span>';});});
       h+='</div></div>';
     }
     if(puedoDarle.length){
       h+='<div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.3px;margin:12px 0 6px">Le podés dar</div>';
       h+='<div class="lista-sel-block"><div class="chips">';
-      puedoDarle.forEach(({code,nums})=>{nums.forEach(n=>{h+='<span class="chip-rep">'+code+' '+n+'</span>';});});
+      puedoDarle.forEach(({code,nums})=>{nums.forEach(n=>{const rawN=code==='FWC'?(n==='00'?0:parseInt(n)):n;h+='<span class="chip-rep" style="cursor:pointer" onclick="confirmarDar(this,''+code+'','+rawN+')" title="Tap para confirmar que la diste">'+code+' '+n+' ✓?</span>';});});
       h+='</div></div>';
     }
 
@@ -603,7 +603,7 @@ function cruzarLista(){
     const totalPedir=puedoPedirle.reduce((s,x)=>s+x.nums.length,0);
     const posibles=Math.min(totalDar,totalPedir);
     if(posibles>0){
-      h+='<div style="margin-top:12px;padding:10px;background:#edfaf4;border-radius:8px;font-size:13px;color:#0F6E56;font-weight:700;text-align:center">✓ Pueden intercambiar '+posibles+' figurita'+(posibles!==1?'s':'')+' 1 a 1</div>';
+      h+='<div style="margin-top:12px;padding:10px;background:#edfaf4;border-radius:8px;font-size:13px;color:#0F6E56;font-weight:700;text-align:center">Tapeá cada figurita para confirmar el intercambio ('+posibles+' posible'+(posibles!==1?'s':'')+')</div>';
     }
     el.innerHTML=h;
   }catch(e){
