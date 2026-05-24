@@ -299,9 +299,11 @@
 
 <script>
 const SELS=['MEX','RSA','KOR','CZE','CAN','BIH','QAT','SUI','BRA','MAR','HAI','SCO','USA','PAR','AUS','TUR','GER','CUW','CIV','ECU','NED','JPN','SWE','TUN','BEL','EGY','IRN','NZL','ESP','CPV','KSA','URU','FRA','SEN','IRQ','NOR','ARG','ALG','AUT','JOR','POR','COD','UZB','COL','ENG','CRO','GHA','PAN'];
-const NAMES={MEX:'México',RSA:'Sudáfrica',KOR:'Corea del Sur',CZE:'Rep. Checa',CAN:'Canadá',BIH:'Bosnia y Herz.',QAT:'Catar',SUI:'Suiza',BRA:'Brasil',MAR:'Marruecos',HAI:'Haití',SCO:'Escocia',USA:'Estados Unidos',PAR:'Paraguay',AUS:'Australia',TUR:'Türkiye',GER:'Alemania',CUW:'Curazao',CIV:'Costa de Marfil',ECU:'Ecuador',NED:'Países Bajos',JPN:'Japón',SWE:'Suecia',TUN:'Túnez',BEL:'Bélgica',EGY:'Egipto',IRN:'Irán',NZL:'Nueva Zelanda',ESP:'España',CPV:'Cabo Verde',KSA:'Arabia Saudita',URU:'Uruguay',FRA:'Francia',SEN:'Senegal',IRQ:'Irak',NOR:'Noruega',ARG:'Argentina',ALG:'Argelia',AUT:'Austria',JOR:'Jordania',POR:'Portugal',COD:'Congo (RD)',UZB:'Uzbekistán',COL:'Colombia',ENG:'Inglaterra',CRO:'Croacia',GHA:'Ghana',PAN:'Panamá',FWC:'FWC Football World Cup',CC:'Coca Cola'};
+const NAMES={MEX:'🇲🇽 México',RSA:'🇿🇦 Sudáfrica',KOR:'🇰🇷 Corea del Sur',CZE:'🇨🇿 Rep. Checa',CAN:'🇨🇦 Canadá',BIH:'🇧🇦 Bosnia y Herz.',QAT:'🇶🇦 Catar',SUI:'🇨🇭 Suiza',BRA:'🇧🇷 Brasil',MAR:'🇲🇦 Marruecos',HAI:'🇭🇹 Haití',SCO:'🏴󠁧󠁢󠁳󠁣󠁴󠁿 Escocia',USA:'🇺🇸 Estados Unidos',PAR:'🇵🇾 Paraguay',AUS:'🇦🇺 Australia',TUR:'🇹🇷 Türkiye',GER:'🇩🇪 Alemania',CUW:'🇨🇼 Curazao',CIV:'🇨🇮 Costa de Marfil',ECU:'🇪🇨 Ecuador',NED:'🇳🇱 Países Bajos',JPN:'🇯🇵 Japón',SWE:'🇸🇪 Suecia',TUN:'🇹🇳 Túnez',BEL:'🇧🇪 Bélgica',EGY:'🇪🇬 Egipto',IRN:'🇮🇷 Irán',NZL:'🇳🇿 Nueva Zelanda',ESP:'🇪🇸 España',CPV:'🇨🇻 Cabo Verde',KSA:'🇸🇦 Arabia Saudita',URU:'🇺🇾 Uruguay',FRA:'🇫🇷 Francia',SEN:'🇸🇳 Senegal',IRQ:'🇮🇶 Irak',NOR:'🇳🇴 Noruega',ARG:'🇦🇷 Argentina',ALG:'🇩🇿 Argelia',AUT:'🇦🇹 Austria',JOR:'🇯🇴 Jordania',POR:'🇵🇹 Portugal',COD:'🇨🇩 Congo (RD)',UZB:'🇺🇿 Uzbekistán',COL:'🇨🇴 Colombia',ENG:'🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra',CRO:'🇭🇷 Croacia',GHA:'🇬🇭 Ghana',PAN:'🇵🇦 Panamá',FWC:'🏆 FWC Football World Cup',CC:'🥤 Coca Cola'};
 const ALL_SELS=[...SELS,'FWC','CC'];
-const FN=19,CN=14,SN=20,TOT=993,LS='panini2026_data';
+// FWC: 20 figuritas numeradas 00-19 (índice 0=00, índice 1=1 ... 19=19)
+const FN=20,CN=14,SN=20,TOT=994,LS='panini2026_data';
+function fwcNum(i){return i===0?'00':String(i);}
 let ST={figs:{},reps:{},sobres:{comprados:0},regaladores:[]};
 let act=null,tt=null,query='',regCant=1;
 let listaOpen={faltan:false,rep:false,intercambio:false};
@@ -335,7 +337,7 @@ function totalReg(){return ST.regaladores.reduce((s,r)=>s+r.sobres,0);}
 function calc(){
   let tengo=0,rep=0,ok=0;
   SELS.forEach(s=>{let c=0;for(let i=1;i<=SN;i++){if(ST.figs[kk(s,i)]){tengo++;c++;}rep+=(ST.reps[kk(s,i)]||0);}if(c===SN)ok++;});
-  for(let i=1;i<=FN;i++){if(ST.figs[kk('FWC',i)])tengo++;rep+=(ST.reps[kk('FWC',i)]||0);}
+  for(let i=0;i<FN;i++){if(ST.figs[kk('FWC',i)])tengo++;rep+=(ST.reps[kk('FWC',i)]||0);}
   for(let i=1;i<=CN;i++){if(ST.figs[kk('CC',i)])tengo++;rep+=(ST.reps[kk('CC',i)]||0);}
   return{tengo,rep,ok,faltan:TOT-tengo};
 }
@@ -397,10 +399,10 @@ function confirmarImport(){
 }
 
 function buildFaltantes(){
-  const res=[];ALL_SELS.forEach(code=>{const n=getN(code),nums=[];for(let i=1;i<=n;i++)if(!ST.figs[kk(code,i)])nums.push(i);if(nums.length)res.push({code,name:getName(code),nums});});return res;
+  const res=[];ALL_SELS.forEach(code=>{const n=getN(code),nums=[];const start=code==='FWC'?0:1;const end=code==='FWC'?FN-1:n;for(let i=start;i<=end;i++)if(!ST.figs[kk(code,i)])nums.push(code==='FWC'?fwcNum(i):i);if(nums.length)res.push({code,name:getName(code),nums,rawNums:nums.map((v,j)=>code==='FWC'?(j):v)});});return res;
 }
 function buildRepetidas(){
-  const res=[];ALL_SELS.forEach(code=>{const n=getN(code),items=[];for(let i=1;i<=n;i++){const r=ST.reps[kk(code,i)]||0;if(r>0)items.push({num:i,cant:r});}if(items.length)res.push({code,name:getName(code),items});});return res;
+  const res=[];ALL_SELS.forEach(code=>{const n=getN(code),items=[];const start=code==='FWC'?0:1;const end=code==='FWC'?FN-1:n;for(let i=start;i<=end;i++){const r=ST.reps[kk(code,i)]||0;if(r>0)items.push({num:i,lbl:code==='FWC'?fwcNum(i):String(i),cant:r});}if(items.length)res.push({code,name:getName(code),items});});return res;
 }
 function updateBadges(){
   const falt=buildFaltantes(),rep=buildRepetidas();
@@ -418,12 +420,12 @@ function toggleLista(tipo){
 function renderListaFaltan(){
   const falt=buildFaltantes(),el=document.getElementById('content-faltan');
   if(!falt.length){el.innerHTML='<div class="empty-msg">🎉 ¡No te falta ninguna figurita!</div>';return;}
-  el.innerHTML=falt.map(({code,name,nums})=>'<div class="lista-sel-block"><div class="lista-sel-name">'+code+' — '+esc(name)+'</div><div class="chips">'+nums.map(n=>'<span class="chip-falta">'+n+'</span>').join('')+'</div></div>').join('');
+  el.innerHTML=falt.map(({code,name,nums})=>'<div class="lista-sel-block"><div class="lista-sel-name">'+esc(name)+'</div><div class="chips">'+nums.map(n=>'<span class="chip-falta">'+n+'</span>').join('')+'</div></div>').join('');
 }
 function renderListaRep(){
   const rep=buildRepetidas(),el=document.getElementById('content-rep');
   if(!rep.length){el.innerHTML='<div class="empty-msg">No tenés repetidas todavía.</div>';return;}
-  el.innerHTML=rep.map(({code,name,items})=>'<div class="lista-sel-block"><div class="lista-sel-name">'+code+' — '+esc(name)+'</div><div class="chips">'+items.map(({num,cant})=>'<span class="chip-rep">'+num+(cant>1?' ×'+cant:'')+'</span>').join('')+'</div></div>').join('');
+  el.innerHTML=rep.map(({code,name,items})=>'<div class="lista-sel-block"><div class="lista-sel-name">'+esc(name)+'</div><div class="chips">'+items.map(({lbl,cant})=>'<span class="chip-rep">'+(lbl||'?')+(cant>1?' ×'+cant:'')+'</span>').join('')+'</div></div>').join('');
 }
 function exportarLista(tipo){
   const ta=document.getElementById('ta-'+tipo);
@@ -476,9 +478,11 @@ function renderFigs(container,sel){
     +'<div style="flex:1;text-align:center"><div style="font-size:14px;font-weight:700;color:#111">'+getName(sel)+'</div><div style="font-size:11px;color:#888">'+sel+' · '+tengo+'/'+n+'</div></div>'
     +'<div>'+(idx<ALL_SELS.length-1?'<button class="btn-green" onclick="navSel(1)">Sig. →</button>':'<span style="font-size:11px;color:#999">último</span>')+'</div>'
     +'</div><div class="fgrid">';
-  for(let i=1;i<=n;i++){
+  const startI=sel==='FWC'?0:1;
+  for(let i=startI;i<=(sel==='FWC'?FN-1:n);i++){
     const key=kk(sel,i),t=!!ST.figs[key],r=ST.reps[key]||0;
-    h+='<div class="fitem"><button class="fbtn'+(t?' t':'')+'" onclick="tog(\''+sel+'\','+i+')">'+i+'</button><span class="rbadge'+(r>0?' hr':'')+'" onclick="addR(\''+sel+'\','+i+')">'+(r>0?'×'+r:'rep')+'</span></div>';
+    const lbl=sel==='FWC'?fwcNum(i):i;
+    h+='<div class="fitem"><button class="fbtn'+(t?' t':'')+'" onclick="tog(\''+sel+'\','+i+')">'+lbl+'</button><span class="rbadge'+(r>0?' hr':'')+'" onclick="addR(\''+sel+'\','+i+')">'+(r>0?'×'+r:'rep')+'</span></div>';
   }
   h+='</div></div>';container.innerHTML=h;
 }
@@ -536,6 +540,11 @@ function cruzarLista(){
   if(!raw){el.innerHTML='<div class="empty-msg">Pegá el bloque de tu amigo primero.</div>';return;}
   try{
     const lines=raw.split('\n');
+    // Detect Figuritas App format
+    const isFiguritasApp=lines.some(l=>l.startsWith('Figuritas App'));
+    if(isFiguritasApp){
+      cruzarListaFiguritasApp(raw,el);return;
+    }
     if(!lines[0].trim().startsWith('PANINI2026')) throw new Error('formato');
     const parseSec=(prefix)=>{
       const line=lines.find(l=>l.startsWith(prefix));
@@ -600,6 +609,91 @@ function cruzarLista(){
   }catch(e){
     el.innerHTML='<div class="empty-msg" style="color:#c0392b">El bloque no tiene el formato correcto.</div>';
   }
+}
+
+
+// ── PARSER FIGURITAS APP ─────────────────────────────────────────────────────
+const FIGURITAS_MAP={'MEX':'MEX','RSA':'RSA','KOR':'KOR','CZE':'CZE','CAN':'CAN','BIH':'BIH','QAT':'QAT','SUI':'SUI','BRA':'BRA','MAR':'MAR','HAI':'HAI','SCO':'SCO','USA':'USA','PAR':'PAR','AUS':'AUS','TUR':'TUR','GER':'GER','CUW':'CUW','CIV':'CIV','ECU':'ECU','NED':'NED','JPN':'JPN','SWE':'SWE','TUN':'TUN','BEL':'BEL','EGY':'EGY','IRN':'IRN','NZL':'NZL','ESP':'ESP','CPV':'CPV','KSA':'KSA','URU':'URU','FRA':'FRA','SEN':'SEN','IRQ':'IRQ','NOR':'NOR','ARG':'ARG','ALG':'ALG','AUT':'AUT','JOR':'JOR','POR':'POR','COD':'COD','UZB':'UZB','COL':'COL','ENG':'ENG','CRO':'CRO','GHA':'GHA','PAN':'PAN','FWC':'FWC','CC':'CC'};
+
+function parseFiguritasLine(line){
+  const m=line.match(/^([A-Z]+)[^:]*:\s*(.+)$/);
+  if(!m) return null;
+  const code=FIGURITAS_MAP[m[1].trim()];
+  if(!code) return null;
+  const nums=m[2].split(',').map(s=>s.trim()).filter(Boolean).map(s=>{
+    if(s==='00') return code==='FWC'?0:null;
+    const n=parseInt(s);return isNaN(n)?null:n;
+  }).filter(v=>v!==null);
+  return{code,nums};
+}
+
+function cruzarListaFiguritasApp(raw,el){
+  const lines=raw.split('\n').map(l=>l.trim()).filter(Boolean);
+  const amigoFaltan={},amigoRepite={};
+  let section=null;
+  for(const line of lines){
+    if(/^me faltan$/i.test(line)){section='faltan';continue;}
+    if(/^repetidas$/i.test(line)){section='rep';continue;}
+    if(!section) continue;
+    const parsed=parseFiguritasLine(line);
+    if(!parsed) continue;
+    if(section==='faltan') amigoFaltan[parsed.code]=parsed.nums.map(n=>({num:n}));
+    else amigoRepite[parsed.code]=parsed.nums.map(n=>({num:n,cant:1}));
+  }
+  const misReps=buildRepetidas();
+  const puedoDarle=[];
+  misReps.forEach(({code,items})=>{
+    if(!amigoFaltan[code]) return;
+    const aFaltan=amigoFaltan[code].map(x=>x.num);
+    const match=items.filter(({num})=>aFaltan.includes(num));
+    if(match.length) puedoDarle.push({code,items:match});
+  });
+  const misFaltan=buildFaltantes();
+  const puedoPedirle=[];
+  misFaltan.forEach(({code,nums})=>{
+    if(!amigoRepite[code]) return;
+    const aRepite=amigoRepite[code].map(x=>x.num);
+    const n=getN(code);const start=code==='FWC'?0:1;const end=code==='FWC'?FN-1:n;
+    const rawNums=[];
+    for(let i=start;i<=end;i++) if(!ST.figs[kk(code,i)]&&aRepite.includes(i)) rawNums.push(i);
+    if(rawNums.length) puedoPedirle.push({code,rawNums});
+  });
+  if(!puedoDarle.length&&!puedoPedirle.length){
+    el.innerHTML='<div class="empty-msg">No hay intercambios posibles con esta persona.</div>';return;
+  }
+  let h='<div style="font-size:11px;color:#1D9E75;font-weight:600;margin-bottom:8px">Lista detectada: formato Figuritas App ✓</div>';
+  if(puedoPedirle.length){
+    h+='<div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:6px">Te puede dar</div><div class="lista-sel-block"><div class="chips">';
+    puedoPedirle.forEach(({code,rawNums})=>{rawNums.forEach(n=>{const lbl=code==='FWC'?fwcNum(n):n;h+='<span class="chip-falta" style="cursor:pointer" onclick="confirmarRecibir(this,\''+code+'\','+n+')" title="Tap para confirmar que la recibiste">'+code+' '+lbl+' ✓?</span>';});});
+    h+='</div></div>';
+  }
+  if(puedoDarle.length){
+    h+='<div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.3px;margin:12px 0 6px">Le podés dar</div><div class="lista-sel-block"><div class="chips">';
+    puedoDarle.forEach(({code,items})=>{items.forEach(({num,lbl})=>{h+='<span class="chip-rep" style="cursor:pointer" onclick="confirmarDar(this,\''+code+'\','+num+')" title="Tap para confirmar que la diste">'+code+' '+(lbl||num)+' ✓?</span>';});});
+    h+='</div></div>';
+  }
+  const posibles=Math.min(puedoDarle.reduce((s,x)=>s+x.items.length,0),puedoPedirle.reduce((s,x)=>s+x.rawNums.length,0));
+  if(posibles>0) h+='<div style="margin-top:12px;padding:10px;background:#edfaf4;border-radius:8px;font-size:13px;color:#0F6E56;font-weight:700;text-align:center">Tapeá cada figurita para confirmar el intercambio ('+posibles+' posible'+(posibles!==1?'s':'')+')</div>';
+  el.innerHTML=h;
+}
+
+function confirmarDar(el,code,num){
+  const key=kk(code,num),r=ST.reps[key]||0;
+  if(r<=0){showToast('Ya no tenés repetidas de esta',1);return;}
+  ST.reps[key]=r-1;save();
+  el.style.background='#bbb';el.style.color='#fff';el.style.pointerEvents='none';
+  el.textContent=el.textContent.replace(' ✓?',' ✓');
+  showToast('Repetida descontada ✓');updateBadges();
+}
+
+function confirmarRecibir(el,code,num){
+  const key=kk(code,num);ST.figs[key]=true;save();
+  el.style.background='#1D9E75';el.style.color='#fff';el.style.pointerEvents='none';
+  el.textContent=el.textContent.replace(' ✓?',' ✓');
+  showToast('Figurita marcada como conseguida ✓');
+  const s=calc(),pct=Math.round(s.tengo/TOT*100);
+  document.getElementById('hdr-sub').textContent=s.tengo+' de '+TOT+' · '+pct+'%';
+  updateBadges();
 }
 
 function setTab(tab){
