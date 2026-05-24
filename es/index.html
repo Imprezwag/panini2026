@@ -589,13 +589,13 @@ function cruzarLista(){
     if(puedoPedirle.length){
       h+='<div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:6px">Te puede dar</div>';
       h+='<div class="lista-sel-block"><div class="chips">';
-      puedoPedirle.forEach(({code,nums})=>{nums.forEach(n=>{const rawN=code==='FWC'?(n==='00'?0:parseInt(n)):n;h+='<span class="chip-falta" style="cursor:pointer" onclick="confirmarRecibir(this,''+code+'','+rawN+')" title="Tap para confirmar que la recibiste">'+code+' '+n+' ✓?</span>';});});
+      puedoPedirle.forEach(({code,nums})=>{nums.forEach(n=>{const rawN=code==='FWC'?(n==='00'?0:parseInt(n)):n;h+='<span class="chip-falta" style="cursor:pointer" onclick="confirmarRecibir(this,\''+code+'\','+rawN+')" title="Tap para confirmar que la recibiste">'+code+' '+n+' ✓?</span>';});});
       h+='</div></div>';
     }
     if(puedoDarle.length){
       h+='<div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.3px;margin:12px 0 6px">Le podés dar</div>';
       h+='<div class="lista-sel-block"><div class="chips">';
-      puedoDarle.forEach(({code,nums})=>{nums.forEach(n=>{const rawN=code==='FWC'?(n==='00'?0:parseInt(n)):n;h+='<span class="chip-rep" style="cursor:pointer" onclick="confirmarDar(this,''+code+'','+rawN+')" title="Tap para confirmar que la diste">'+code+' '+n+' ✓?</span>';});});
+      puedoDarle.forEach(({code,nums})=>{nums.forEach(n=>{const rawN=code==='FWC'?(n==='00'?0:parseInt(n)):n;h+='<span class="chip-rep" style="cursor:pointer" onclick="confirmarDar(this,\''+code+'\','+rawN+')" title="Tap para confirmar que la diste">'+code+' '+n+' ✓?</span>';});});
       h+='</div></div>';
     }
 
