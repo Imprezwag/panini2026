@@ -156,6 +156,8 @@
         <div class="scard"><div class="slbl">Missing</div><div class="sval" id="s-faltan">993</div><div class="ssub">stickers</div></div>
         <div class="scard"><div class="slbl">Duplicates</div><div class="sval" id="s-rep">0</div><div class="ssub">total</div></div>
         <div class="scard"><div class="slbl">Complete teams</div><div class="sval" id="s-sels">0</div><div class="ssub">of 48</div></div>
+        <div class="scard"><div class="slbl">Received (trade)</div><div class="sval" id="s-irecib">0</div><div class="ssub">stickers</div></div>
+        <div class="scard"><div class="slbl">Given (trade)</div><div class="sval" id="s-idad">0</div><div class="ssub">stickers</div></div>
       </div>
       <div class="sec">Estimation</div>
       <div class="card">
@@ -299,12 +301,12 @@
 
 <script>
 const SELS=['MEX','RSA','KOR','CZE','CAN','BIH','QAT','SUI','BRA','MAR','HAI','SCO','USA','PAR','AUS','TUR','GER','CUW','CIV','ECU','NED','JPN','SWE','TUN','BEL','EGY','IRN','NZL','ESP','CPV','KSA','URU','FRA','SEN','IRQ','NOR','ARG','ALG','AUT','JOR','POR','COD','UZB','COL','ENG','CRO','GHA','PAN'];
-const NAMES={MEX:'🇲🇽 Mexico',RSA:'🇿🇦 South Africa',KOR:'🇰🇷 South Korea',CZE:'🇨🇿 Czech Republic',CAN:'🇨🇦 Canada',BIH:'🇧🇦 Bosnia & Herz.',QAT:'🇶🇦 Qatar',SUI:'🇨🇭 Switzerland',BRA:'🇧🇷 Brazil',MAR:'🇲🇦 Morocco',HAI:'🇭🇹 Haiti',SCO:'🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland',USA:'🇺🇸 United States',PAR:'🇵🇾 Paraguay',AUS:'🇦🇺 Australia',TUR:'🇹🇷 Türkiye',GER:'🇩🇪 Germany',CUW:'🇨🇼 Curaçao',CIV:'🇨🇮 Ivory Coast',ECU:'🇪🇨 Ecuador',NED:'🇳🇱 Netherlands',JPN:'🇯🇵 Japan',SWE:'🇸🇪 Sweden',TUN:'🇹🇳 Tunisia',BEL:'🇧🇪 Belgium',EGY:'🇪🇬 Egypt',IRN:'🇮🇷 Iran',NZL:'🇳🇿 New Zealand',ESP:'🇪🇸 Spain',CPV:'🇨🇻 Cape Verde',KSA:'🇸🇦 Saudi Arabia',URU:'🇺🇾 Uruguay',FRA:'🇫🇷 France',SEN:'🇸🇳 Senegal',IRQ:'🇮🇶 Iraq',NOR:'🇳🇴 Norway',ARG:'🇦🇷 Argentina',ALG:'🇩🇿 Algeria',AUT:'🇦🇹 Austria',JOR:'🇯🇴 Jordan',POR:'🇵🇹 Portugal',COD:'🇨🇩 DR Congo',UZB:'🇺🇿 Uzbekistan',COL:'🇨🇴 Colombia',ENG:'🏴󠁧󠁢󠁥󠁮󠁧󠁿 England',CRO:'🇭🇷 Croatia',GHA:'🇬🇭 Ghana',PAN:'🇵🇦 Panama',FWC:'🏆 FWC Football World Cup',CC:'🥤 Coca Cola'};
+const NAMES={MEX:'🇲🇽 Mexico',RSA:'🇿🇦 South Africa',KOR:'🇰🇷 South Korea',CZE:'🇨🇿 Czech Republic',CAN:'🇨🇦 Canada',BIH:'🇧🇦 Bosnia & Herz.',QAT:'🇶🇦 Qatar',SUI:'🇨🇭 Switzerland',BRA:'🇧🇷 Brazil',MAR:'🇲🇦 Morocco',HAI:'🇭🇹 Haiti',SCO:'🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland',USA:'🇺🇸 United States',PAR:'🇵🇾 Paraguay',AUS:'🇦🇺 Australia',TUR:'🇹🇷 Türkiye',GER:'🇩🇪 Germany',CUW:'🇨🇼 Curaçao',CIV:'🇨🇮 Ivory Coast',ECU:'🇪🇨 Ecuador',NED:'🇳🇱 Netherlands',JPN:'🇯🇵 Japan',SWE:'🇸🇪 Sweden',TUN:'🇹🇳 Tunisia',BEL:'🇧🇪 Belgium',EGY:'🇪🇬 Egypt',IRN:'🇮🇷 Iran',NZL:'🇳🇿 New Zealand',ESP:'🇪🇸 Spain',CPV:'🇨🇻 Cape Verde',KSA:'🇸🇦 Saudi Arabia',URU:'🇺🇾 Uruguay',FRA:'🇫🇷 France',SEN:'🇸🇳 Senegal',IRQ:'🇮🇶 Iraq',NOR:'🇳🇴 Norway',ARG:'🇦🇷 Argentina',ALG:'🇩🇿 Algeria',AUT:'🇦🇹 Austria',JOR:'🇯🇴 Jordania',POR:'🇵🇹 Portugal',COD:'🇨🇩 DR Congo',UZB:'🇺🇿 Uzbekistan',COL:'🇨🇴 Colombia',ENG:'🏴󠁧󠁢󠁥󠁮󠁧󠁿 England',CRO:'🇭🇷 Croatia',GHA:'🇬🇭 Ghana',PAN:'🇵🇦 Panama',FWC:'🏆 FWC Football World Cup',CC:'🥤 Coca Cola'};
 const ALL_SELS=[...SELS,'FWC','CC'];
 // FWC: 20 figuritas numeradas 00-19 (índice 0=00, índice 1=1 ... 19=19)
 const FN=20,CN=14,SN=20,TOT=994,LS='panini2026_data';
 function fwcNum(i){return i===0?'00':String(i);}
-let ST={figs:{},reps:{},sobres:{comprados:0},regaladores:[]};
+let ST={figs:{},reps:{},sobres:{comprados:0},regaladores:[],intercambios:{recibidas:0,dadas:0}};
 let act=null,tt=null,query='',regCant=1;
 let listaOpen={faltan:false,rep:false,intercambio:false};
 
@@ -316,8 +318,8 @@ function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').repl
 function load(){
   try{
     const r=localStorage.getItem(LS);
-    if(r){const p=JSON.parse(r);if(p){ST.figs=p.figs||{};ST.reps=p.reps||{};ST.sobres=p.sobres||{comprados:0};ST.regaladores=p.regaladores||[];if(typeof ST.sobres.regalados==='number')delete ST.sobres.regalados;}}
-  }catch(e){showToast('Error loading data',1);}
+    if(r){const p=JSON.parse(r);if(p){ST.figs=p.figs||{};ST.reps=p.reps||{};ST.sobres=p.sobres||{comprados:0};ST.regaladores=p.regaladores||[];ST.intercambios=p.intercambios||{recibidas:0,dadas:0};if(typeof ST.sobres.regalados==='number')delete ST.sobres.regalados;}}
+  }catch(e){showToast('Error al cargar',1);}
   renderAll();
 }
 
@@ -351,17 +353,21 @@ function renderAll(){
   document.getElementById('s-faltan').textContent=s.faltan;
   document.getElementById('s-rep').textContent=s.rep;
   document.getElementById('s-sels').textContent=s.ok;
+  document.getElementById('s-irecib').textContent=ST.intercambios.recibidas||0;
+  document.getElementById('s-idad').textContent=ST.intercambios.dadas||0;
+  document.getElementById('s-irecib').textContent=ST.intercambios.recibidas||0;
+  document.getElementById('s-idad').textContent=ST.intercambios.dadas||0;
   document.getElementById('e-comp').textContent=comp;
   document.getElementById('e-reg').textContent=reg;
   document.getElementById('e-tot').textContent=tot;
   document.getElementById('cnt-comp').textContent=comp;
   document.getElementById('cnt-tot').textContent=tot;
 
-  const nuevas=s.tengo-s.rep;
-  const prom=tot>0&&nuevas>0?nuevas/tot:null;
+  const porSobre=s.tengo-(ST.intercambios.recibidas||0);
+  const prom=tot>0&&porSobre>0?porSobre/tot:null;
   if(prom){
     document.getElementById('e-prom').textContent=prom.toFixed(2);
-    document.getElementById('e-falt').textContent=Math.ceil(s.faltan/prom)+' packs';
+    document.getElementById('e-falt').textContent=Math.ceil(s.faltan/prom)+' sobres';
   }else{
     document.getElementById('e-prom').textContent='-';
     document.getElementById('e-falt').textContent='-';
@@ -390,12 +396,12 @@ function confirmarImport(){
   const ta=document.getElementById('ta-import');
   try{
     const p=JSON.parse(ta.value.trim());
-    if(!p||typeof p.figs!=='object') throw new Error('Invalid format');
+    if(!p||typeof p.figs!=='object') throw new Error('Formato inválido');
     ST.figs=p.figs||{};ST.reps=p.reps||{};ST.sobres=p.sobres||{comprados:0};ST.regaladores=p.regaladores||[];
     save();
     ta.classList.remove('vis');document.getElementById('btn-confirm-import').classList.remove('vis');ta.value='';
     showToast('Data imported ✓');renderAll();
-  }catch(e){showToast('Error: invalid text',1);}
+  }catch(e){showToast('Error: el texto no es válido',1);}
 }
 
 function buildFaltantes(){
@@ -406,16 +412,16 @@ function buildRepetidas(){
 }
 function updateBadges(){
   const falt=buildFaltantes(),rep=buildRepetidas();
-  document.getElementById('badge-faltan').textContent=falt.reduce((s,x)=>s+x.nums.length,0)+' stickers';
-  document.getElementById('badge-rep').textContent=rep.reduce((s,x)=>s+x.items.reduce((a,r)=>a+r.cant,0),0)+' stickers';
+  document.getElementById('badge-faltan').textContent=falt.reduce((s,x)=>s+x.nums.length,0)+' figuritas';
+  document.getElementById('badge-rep').textContent=rep.reduce((s,x)=>s+x.items.reduce((a,r)=>a+r.cant,0),0)+' figuritas';
 }
 function toggleLista(tipo){
   listaOpen[tipo]=!listaOpen[tipo];
   document.getElementById('body-'+tipo).style.display=listaOpen[tipo]?'block':'none';
   document.getElementById('arrow-'+tipo).className='lista-arrow'+(listaOpen[tipo]?' open':'');
-  if(tipo==='faltan'||tipo==='dup') document.getElementById('ta-'+tipo).style.display='none';
+  if(tipo==='faltan'||tipo==='rep') document.getElementById('ta-'+tipo).style.display='none';
   if(listaOpen[tipo]&&tipo==='faltan')renderListaFaltan();
-  if(listaOpen[tipo]&&tipo==='dup')renderListaRep();
+  if(listaOpen[tipo]&&tipo==='rep')renderListaRep();
 }
 function renderListaFaltan(){
   const falt=buildFaltantes(),el=document.getElementById('content-faltan');
@@ -432,14 +438,14 @@ function exportarLista(tipo){
   let txt='';
   if(tipo==='faltan'){
     const falt=buildFaltantes();
-    txt=!falt.length?'You have all the stickers! 🎉':'FIGURITAS QUE ME FALTAN — Album Mundial 2026\n'+'='.repeat(44)+'\n\n'+falt.map(({code,name,nums})=>code+' ('+name+'): '+nums.join(', ')).join('\n')+'\n\nTotal: '+falt.reduce((s,x)=>s+x.nums.length,0)+' stickers';
+    txt=!falt.length?'¡No te falta ninguna figurita! 🎉':'FIGURITAS QUE ME FALTAN — Album Mundial 2026\n'+'='.repeat(44)+'\n\n'+falt.map(({code,name,nums})=>code+' ('+name+'): '+nums.join(', ')).join('\n')+'\n\nTotal: '+falt.reduce((s,x)=>s+x.nums.length,0)+' figuritas';
   }else{
     const rep=buildRepetidas();
-    txt=!rep.length?'No duplicates yet.':'FIGURITAS REPETIDAS — Album Mundial 2026\n'+'='.repeat(42)+'\n\n'+rep.map(({code,name,items})=>code+' ('+name+'): '+items.map(({num,cant})=>num+(cant>1?' (×'+cant+')':'')).join(', ')).join('\n')+'\n\nTotal: '+rep.reduce((s,x)=>s+x.items.reduce((a,r)=>a+r.cant,0),0)+' figuritas repetidas';
+    txt=!rep.length?'No tenés repetidas todavía.':'FIGURITAS REPETIDAS — Album Mundial 2026\n'+'='.repeat(42)+'\n\n'+rep.map(({code,name,items})=>code+' ('+name+'): '+items.map(({num,cant})=>num+(cant>1?' (×'+cant+')':'')).join(', ')).join('\n')+'\n\nTotal: '+rep.reduce((s,x)=>s+x.items.reduce((a,r)=>a+r.cant,0),0)+' figuritas repetidas';
   }
   ta.value=txt;ta.style.display='block';ta.select();
-  try{navigator.clipboard.writeText(txt).then(()=>showToast('List copied ✓')).catch(()=>showToast('Select and copy manually'));}
-  catch(e){try{document.execCommand('copy');showToast('List copied ✓');}catch(_){showToast('Select and copy manually');}}
+  try{navigator.clipboard.writeText(txt).then(()=>showToast('Lista copiada ✓')).catch(()=>showToast('Select and copy manually'));}
+  catch(e){try{document.execCommand('copy');showToast('Lista copiada ✓');}catch(_){showToast('Select and copy manually');}}
 }
 
 function renderAlbum(){
@@ -448,10 +454,10 @@ function renderAlbum(){
   const q=query.toLowerCase().trim();
   const fs=SELS.filter(s=>!q||s.toLowerCase().includes(q)||getName(s).toLowerCase().includes(q));
   const sp=['FWC','CC'].filter(s=>!q||s.toLowerCase().includes(q)||getName(s).toLowerCase().includes(q));
-  let h='<div class="search-wrap"><span class="search-icon">🔍</span><input class="search-input" type="text" placeholder="Search team..." value="'+esc(query)+'" oninput="onSearch(this.value)" id="search-box"><button class="search-clear'+(query?' vis':'')+'" onclick="clearSearch()">✕</button></div>';
+  let h='<div class="search-wrap"><span class="search-icon">🔍</span><input class="search-input" type="text" placeholder="Buscar selección..." value="'+esc(query)+'" oninput="onSearch(this.value)" id="search-box"><button class="search-clear'+(query?' vis':'')+'" onclick="clearSearch()">✕</button></div>';
   if(!fs.length&&!sp.length){h+='<div class="no-results">Sin resultados para "'+esc(query)+'"</div>';c.innerHTML=h;return;}
   if(fs.length){
-    h+='<div class="sec">Selecciones ('+(query?fs.length+' result'+(fs.length!==1?'s':''):'48')+')</div><div class="sgrid2">';
+    h+='<div class="sec">Selecciones ('+(query?fs.length+' resultado'+(fs.length!==1?'s':''):'48')+')</div><div class="sgrid2">';
     fs.forEach(sel=>{
       let cnt=0;for(let i=1;i<=SN;i++)if(ST.figs[kk(sel,i)])cnt++;
       const p=Math.round(cnt/SN*100),done=cnt===SN;
@@ -482,7 +488,7 @@ function renderFigs(container,sel){
   for(let i=startI;i<=(sel==='FWC'?FN-1:n);i++){
     const key=kk(sel,i),t=!!ST.figs[key],r=ST.reps[key]||0;
     const lbl=sel==='FWC'?fwcNum(i):i;
-    h+='<div class="fitem"><button class="fbtn'+(t?' t':'')+'" onclick="tog(\''+sel+'\','+i+')">'+lbl+'</button><span class="rbadge'+(r>0?' hr':'')+'" onclick="addR(\''+sel+'\','+i+')">'+(r>0?'×'+r:'dup')+'</span></div>';
+    h+='<div class="fitem"><button class="fbtn'+(t?' t':'')+'" onclick="tog(\''+sel+'\','+i+')">'+lbl+'</button><span class="rbadge'+(r>0?' hr':'')+'" onclick="addR(\''+sel+'\','+i+')">'+(r>0?'×'+r:'rep')+'</span></div>';
   }
   h+='</div></div>';container.innerHTML=h;
 }
@@ -500,13 +506,13 @@ function chgComp(d){ST.sobres.comprados=Math.max(0,(ST.sobres.comprados||0)+d);s
 function chgRegInput(d){regCant=Math.max(1,regCant+d);document.getElementById('reg-cant').textContent=regCant;}
 function agregarRegalo(){
   const inp=document.getElementById('reg-nombre'),nombre=(inp.value||'').trim();
-  if(!nombre){inp.focus();showToast('Please enter a name',1);return;}
+  if(!nombre){inp.focus();showToast('Ingresá un nombre',1);return;}
   const idx=ST.regaladores.findIndex(r=>r.nombre.toLowerCase()===nombre.toLowerCase());
   if(idx>=0)ST.regaladores[idx].sobres+=regCant;else ST.regaladores.push({nombre,sobres:regCant});
   inp.value='';regCant=1;document.getElementById('reg-cant').textContent='1';save();renderAll();
 }
 function chgRegalador(idx,d){ST.regaladores[idx].sobres=Math.max(0,ST.regaladores[idx].sobres+d);if(ST.regaladores[idx].sobres===0)ST.regaladores.splice(idx,1);save();renderAll();}
-function delRegalador(idx){const n=ST.regaladores[idx].nombre;ST.regaladores.splice(idx,1);save();renderAll();showToast(n+' removed');}
+function delRegalador(idx){const n=ST.regaladores[idx].nombre;ST.regaladores.splice(idx,1);save();renderAll();showToast(n+' eliminado');}
 function renderRegaladores(){
   const el=document.getElementById('regaladores-list');if(!el)return;
   const sorted=[...ST.regaladores].sort((a,b)=>b.sobres-a.sobres),tot=totalReg();
@@ -514,12 +520,120 @@ function renderRegaladores(){
   let h='<div class="reg-hdr"><span style="font-size:13px;font-weight:700;color:#111">'+sorted.length+' persona'+(sorted.length!==1?'s':'')+' regalaron</span><span style="font-size:12px;color:#888">'+tot+' sobres</span></div>';
   sorted.forEach(r=>{
     const idx=ST.regaladores.findIndex(x=>x.nombre===r.nombre);
-    h+='<div class="reg-row"><div><div style="font-size:14px;font-weight:600;color:#111">'+esc(r.nombre)+'</div><div style="font-size:11px;color:#aaa">'+(r.sobres===1?'1 pack':r.sobres+' packs')+'</div></div>'
+    h+='<div class="reg-row"><div><div style="font-size:14px;font-weight:600;color:#111">'+esc(r.nombre)+'</div><div style="font-size:11px;color:#aaa">'+(r.sobres===1?'1 sobre':r.sobres+' sobres')+'</div></div>'
       +'<div style="display:flex;align-items:center;gap:8px"><span style="font-size:14px;font-weight:700;color:#1D9E75">'+r.sobres+' 📦</span>'
       +'<button class="cbtn sm" onclick="chgRegalador('+idx+',-1)">−</button><button class="cbtn sm" onclick="chgRegalador('+idx+',1)">+</button>'
       +'<button class="reg-del" onclick="delRegalador('+idx+')">✕</button></div></div>';
   });
   el.innerHTML=h;
+}
+
+
+// ── SUGERIDO DE INTERCAMBIO ───────────────────────────────────────────────────
+function valorFig(code, num){
+  // FWC todas valen mas
+  if(code==='FWC') return 3;
+  // CC mas raras que seleccion comun
+  if(code==='CC') return 2;
+  // #1 de cada seleccion es escudo brillante
+  if(num===1) return 2;
+  return 1;
+}
+
+function generarSugerido(amigoFaltan, amigoRepite){
+  const misReps=buildRepetidas();
+  const misFaltan=buildFaltantes();
+
+  // Lo que puedo darle (mis repetidas que el necesita)
+  const puedoDar=[];
+  misReps.forEach(({code,items})=>{
+    if(!amigoFaltan[code]) return;
+    const aFaltan=amigoFaltan[code].map(x=>x.num);
+    items.forEach(({num,lbl})=>{
+      if(aFaltan.includes(num)) puedoDar.push({code,num,lbl:lbl||String(num),val:valorFig(code,num)});
+    });
+  });
+
+  // Lo que me puede dar (sus repetidas que yo necesito)
+  const puedoPedir=[];
+  misFaltan.forEach(({code,nums})=>{
+    if(!amigoRepite[code]) return;
+    const aRepite=amigoRepite[code].map(x=>x.num);
+    const n=getN(code);const start=code==='FWC'?0:1;const end=code==='FWC'?FN-1:n;
+    for(let i=start;i<=end;i++){
+      if(!ST.figs[kk(code,i)]&&aRepite.includes(i)){
+        const lbl=code==='FWC'?fwcNum(i):String(i);
+        puedoPedir.push({code,num:i,lbl,val:valorFig(code,i)});
+      }
+    }
+  });
+
+  // Ordenar por valor descendente para priorizar especiales
+  puedoDar.sort((a,b)=>b.val-a.val);
+  puedoPedir.sort((a,b)=>b.val-a.val);
+
+  // Armar sugerencia: intentar emparejar por valor similar
+  // Agrupar por valor
+  const darPorVal={1:[],2:[],3:[]};
+  const pedirPorVal={1:[],2:[],3:[]};
+  puedoDar.forEach(f=>darPorVal[f.val].push(f));
+  puedoPedir.forEach(f=>pedirPorVal[f.val].push(f));
+
+  const sugerenciaDar=[];
+  const sugerenciaPedir=[];
+
+  // Match FWC x FWC (val 3)
+  const minFWC=Math.min(darPorVal[3].length,pedirPorVal[3].length);
+  for(let i=0;i<minFWC;i++){sugerenciaDar.push(darPorVal[3][i]);sugerenciaPedir.push(pedirPorVal[3][i]);}
+
+  // Match especiales x especiales (val 2: CC y #1)
+  const minEsp=Math.min(darPorVal[2].length,pedirPorVal[2].length);
+  for(let i=0;i<minEsp;i++){sugerenciaDar.push(darPorVal[2][i]);sugerenciaPedir.push(pedirPorVal[2][i]);}
+
+  // Match comunes x comunes (val 1)
+  const minCom=Math.min(darPorVal[1].length,pedirPorVal[1].length);
+  for(let i=0;i<minCom;i++){sugerenciaDar.push(darPorVal[1][i]);sugerenciaPedir.push(pedirPorVal[1][i]);}
+
+  return{dar:sugerenciaDar,pedir:sugerenciaPedir,todoDar:puedoDar,todoPedir:puedoPedir};
+}
+
+function getFlagName(code){return NAMES[code]||code;}
+
+function formatSugeridoWhatsApp(dar,pedir){
+  if(!dar.length&&!pedir.length) return null;
+
+  // Group by code
+  const agrupar=(arr)=>{
+    const map={};
+    arr.forEach(({code,lbl})=>{
+      if(!map[code]) map[code]=[];
+      map[code].push(lbl);
+    });
+    return map;
+  };
+
+  const darAgrup=agrupar(dar);
+  const pedirAgrup=agrupar(pedir);
+
+  let txt='🤝 *Trade suggestion*\n\n';
+  txt+='📤 *I give you:*\n';
+  if(Object.keys(darAgrup).length){
+    Object.entries(darAgrup).forEach(([code,nums])=>{
+      txt+=getFlagName(code)+': '+nums.join(', ')+'\n';
+    });
+  } else {
+    txt+='(none in this group)\n';
+  }
+  txt+='\n📥 *You give me:*\n';
+  if(Object.keys(pedirAgrup).length){
+    Object.entries(pedirAgrup).forEach(([code,nums])=>{
+      txt+=getFlagName(code)+': '+nums.join(', ')+'\n';
+    });
+  } else {
+    txt+='(none in this group)\n';
+  }
+  txt+='\n_Generado con Album Mundial 2026_';
+  return txt;
 }
 
 // ── INTERCAMBIO ──────────────────────────────────────────────────────────────
@@ -530,8 +644,8 @@ function generarBloqueIntercambio(){
   const bloque='PANINI2026\nFALTAN:'+linFaltan+'\nREPITO:'+linReps;
   const ta=document.getElementById('ta-intercambio-out');
   ta.value=bloque;ta.style.display='block';ta.select();
-  try{navigator.clipboard.writeText(bloque).then(()=>showToast('List copied ✓')).catch(()=>showToast('Select and copy manually'));}
-  catch(e){try{document.execCommand('copy');showToast('List copied ✓');}catch(_){showToast('Select and copy manually');}}
+  try{navigator.clipboard.writeText(bloque).then(()=>showToast('Lista copiada ✓')).catch(()=>showToast('Select and copy manually'));}
+  catch(e){try{document.execCommand('copy');showToast('Lista copiada ✓');}catch(_){showToast('Select and copy manually');}}
 }
 
 function cruzarLista(){
@@ -540,9 +654,9 @@ function cruzarLista(){
   if(!raw){el.innerHTML='<div class="empty-msg">Pegá el bloque de tu amigo primero.</div>';return;}
   try{
     const lines=raw.split('\n');
-    // Detect Figuritas App format
-    const isFiguritasApp=lines.some(l=>l.startsWith('Figuritas App'));
-    if(isFiguritasApp){
+    // Detect external app format (Figuritas App or similar)
+    const isExternalApp=lines.some(l=>l.startsWith('Figuritas App'))||lines.some(l=>/^(Me faltan|Repetidas|Me Faltan)$/i.test(l))||lines.some(l=>/^FWC\s/.test(l)&&l.includes(':'));
+    if(isExternalApp){
       cruzarListaFiguritasApp(raw,el);return;
     }
     if(!lines[0].trim().startsWith('PANINI2026')) throw new Error('formato');
@@ -587,15 +701,15 @@ function cruzarLista(){
 
     let h='';
     if(puedoPedirle.length){
-      h+='<div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:6px">They can give you</div>';
+      h+='<div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:6px">Te puede dar</div>';
       h+='<div class="lista-sel-block"><div class="chips">';
-      puedoPedirle.forEach(({code,nums})=>{nums.forEach(n=>{const rawN=code==='FWC'?(n==='00'?0:parseInt(n)):n;h+='<span class="chip-falta" style="cursor:pointer" onclick="confirmarRecibir(this,\''+code+'\','+rawN+')" title="Tap to confirm you received it">'+code+' '+n+' ✓?</span>';});});
+      puedoPedirle.forEach(({code,nums})=>{nums.forEach(n=>{const rawN=code==='FWC'?(n==='00'?0:parseInt(n)):n;h+='<span class="chip-falta" style="cursor:pointer" onclick="confirmarRecibir(this,\''+code+'\','+rawN+')" title="Tap para confirmar que la recibiste">'+code+' '+n+' ✓?</span>';});});
       h+='</div></div>';
     }
     if(puedoDarle.length){
-      h+='<div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.3px;margin:12px 0 6px">You can give them</div>';
+      h+='<div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.3px;margin:12px 0 6px">Le podés dar</div>';
       h+='<div class="lista-sel-block"><div class="chips">';
-      puedoDarle.forEach(({code,nums})=>{nums.forEach(n=>{const rawN=code==='FWC'?(n==='00'?0:parseInt(n)):n;h+='<span class="chip-rep" style="cursor:pointer" onclick="confirmarDar(this,\''+code+'\','+rawN+')" title="Tap to confirm you gave it">'+code+' '+n+' ✓?</span>';});});
+      puedoDarle.forEach(({code,nums})=>{nums.forEach(n=>{const rawN=code==='FWC'?(n==='00'?0:parseInt(n)):n;h+='<span class="chip-rep" style="cursor:pointer" onclick="confirmarDar(this,\''+code+'\','+rawN+')" title="Tap para confirmar que la diste">'+code+' '+n+' ✓?</span>';});});
       h+='</div></div>';
     }
 
@@ -603,7 +717,21 @@ function cruzarLista(){
     const totalPedir=puedoPedirle.reduce((s,x)=>s+x.nums.length,0);
     const posibles=Math.min(totalDar,totalPedir);
     if(posibles>0){
-      h+='<div style="margin-top:12px;padding:10px;background:#edfaf4;border-radius:8px;font-size:13px;color:#0F6E56;font-weight:700;text-align:center">✓ Pueden intercambiar '+posibles+' figurita'+(posibles!==1?'s':'')+' 1 a 1</div>';
+      h+='<div style="margin-top:12px;padding:10px;background:#edfaf4;border-radius:8px;font-size:13px;color:#0F6E56;font-weight:700;text-align:center">Tapeá cada figurita para confirmar el intercambio ('+posibles+' posible'+(posibles!==1?'s':'')+')</div>';
+    }
+    // Sugerido
+    const amigoFalt2={},amigoRep2={};
+    Object.entries(amigoFaltan).forEach(([c,v])=>{amigoFalt2[c]=v;});
+    Object.entries(amigoRepite).forEach(([c,v])=>{amigoRep2[c]=v;});
+    const sug2=generarSugerido(amigoFalt2,amigoRep2);
+    const txt2=formatSugeridoWhatsApp(sug2.dar,sug2.pedir);
+    if(txt2){
+      h+='<div style="border-top:1px solid #eee;margin-top:14px;padding-top:12px">';
+      h+='<div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:6px">💬 WhatsApp suggestion</div>';
+      h+='<div style="font-size:11px;color:#666;margin-bottom:8px">Basado en valor (FWC, especiales #1, CC y comunes por separado)</div>';
+      h+='<textarea id="ta-sugerido" readonly style="width:100%;padding:10px;font-size:12px;border:1px solid #ddd;border-radius:8px;background:#f9f9f9;color:#111;resize:none;min-height:120px;box-sizing:border-box">'+esc(txt2)+'</textarea>';
+      h+='<button class="export-btn" style="margin-top:8px" onclick="copiarSugerido()">📋 Copiar mensaje</button>';
+      h+='</div>';
     }
     el.innerHTML=h;
   }catch(e){
@@ -616,6 +744,7 @@ function cruzarLista(){
 const FIGURITAS_MAP={'MEX':'MEX','RSA':'RSA','KOR':'KOR','CZE':'CZE','CAN':'CAN','BIH':'BIH','QAT':'QAT','SUI':'SUI','BRA':'BRA','MAR':'MAR','HAI':'HAI','SCO':'SCO','USA':'USA','PAR':'PAR','AUS':'AUS','TUR':'TUR','GER':'GER','CUW':'CUW','CIV':'CIV','ECU':'ECU','NED':'NED','JPN':'JPN','SWE':'SWE','TUN':'TUN','BEL':'BEL','EGY':'EGY','IRN':'IRN','NZL':'NZL','ESP':'ESP','CPV':'CPV','KSA':'KSA','URU':'URU','FRA':'FRA','SEN':'SEN','IRQ':'IRQ','NOR':'NOR','ARG':'ARG','ALG':'ALG','AUT':'AUT','JOR':'JOR','POR':'POR','COD':'COD','UZB':'UZB','COL':'COL','ENG':'ENG','CRO':'CRO','GHA':'GHA','PAN':'PAN','FWC':'FWC','CC':'CC'};
 
 function parseFiguritasLine(line){
+  // Matches "MEX 🇲🇽: 1, 2, 3" or "FWC 🏆: 1, 2" or "FWC 🌎: 5, 6"
   const m=line.match(/^([A-Z]+)[^:]*:\s*(.+)$/);
   if(!m) return null;
   const code=FIGURITAS_MAP[m[1].trim()];
@@ -633,10 +762,21 @@ function cruzarListaFiguritasApp(raw,el){
   let section=null;
   for(const line of lines){
     if(/^me faltan$/i.test(line)){section='faltan';continue;}
-    if(/^repetidas$/i.test(line)){section='dup';continue;}
+    if(/^repetidas?$/i.test(line)){section='rep';continue;}
     if(!section) continue;
     const parsed=parseFiguritasLine(line);
     if(!parsed) continue;
+    // FWC subgroups (🏆, 🌎, 📜) all map to FWC - merge nums
+    if(parsed.code==='FWC'){
+      if(section==='faltan'){
+        amigoFaltan['FWC']=amigoFaltan['FWC']||[];
+        amigoFaltan['FWC'].push(...parsed.nums.map(n=>({num:n})));
+      } else {
+        amigoRepite['FWC']=amigoRepite['FWC']||[];
+        amigoRepite['FWC'].push(...parsed.nums.map(n=>({num:n,cant:1})));
+      }
+      continue;
+    }
     if(section==='faltan') amigoFaltan[parsed.code]=parsed.nums.map(n=>({num:n}));
     else amigoRepite[parsed.code]=parsed.nums.map(n=>({num:n,cant:1}));
   }
@@ -661,38 +801,48 @@ function cruzarListaFiguritasApp(raw,el){
   if(!puedoDarle.length&&!puedoPedirle.length){
     el.innerHTML='<div class="empty-msg">No hay intercambios posibles con esta persona.</div>';return;
   }
-  let h='<div style="font-size:11px;color:#1D9E75;font-weight:600;margin-bottom:8px">Lista detectada: formato Figuritas App ✓</div>';
+  // Generate sugerido
+  const sug=generarSugerido(amigoFaltan,amigoRepite);
+  const txtWhatsApp=formatSugeridoWhatsApp(sug.dar,sug.pedir);
+
+  let h='<div style="font-size:11px;color:#1D9E75;font-weight:600;margin-bottom:8px">Lista detectada: formato externo ✓</div>';
   if(puedoPedirle.length){
-    h+='<div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:6px">They can give you</div><div class="lista-sel-block"><div class="chips">';
+    h+='<div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:6px">Te puede dar</div><div class="lista-sel-block"><div class="chips">';
     puedoPedirle.forEach(({code,rawNums})=>{rawNums.forEach(n=>{const lbl=code==='FWC'?fwcNum(n):n;h+='<span class="chip-falta" style="cursor:pointer" onclick="confirmarRecibir(this,\''+code+'\','+n+')" title="Tap para confirmar que la recibiste">'+code+' '+lbl+' ✓?</span>';});});
     h+='</div></div>';
   }
   if(puedoDarle.length){
-    h+='<div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.3px;margin:12px 0 6px">You can give them</div><div class="lista-sel-block"><div class="chips">';
+    h+='<div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.3px;margin:12px 0 6px">Le podés dar</div><div class="lista-sel-block"><div class="chips">';
     puedoDarle.forEach(({code,items})=>{items.forEach(({num,lbl})=>{h+='<span class="chip-rep" style="cursor:pointer" onclick="confirmarDar(this,\''+code+'\','+num+')" title="Tap para confirmar que la diste">'+code+' '+(lbl||num)+' ✓?</span>';});});
     h+='</div></div>';
   }
   const posibles=Math.min(puedoDarle.reduce((s,x)=>s+x.items.length,0),puedoPedirle.reduce((s,x)=>s+x.rawNums.length,0));
-  if(posibles>0) h+='<div style="margin-top:12px;padding:10px;background:#edfaf4;border-radius:8px;font-size:13px;color:#0F6E56;font-weight:700;text-align:center">Tapeá cada figurita para confirmar el intercambio ('+posibles+' possible'+(posibles!==1?'s':'')+')</div>';
+  if(posibles>0) h+='<div style="margin-top:12px;padding:10px;background:#edfaf4;border-radius:8px;font-size:13px;color:#0F6E56;font-weight:700;text-align:center">Tapeá cada figurita para confirmar el intercambio ('+posibles+' posible'+(posibles!==1?'s':'')+')</div>';
   el.innerHTML=h;
 }
 
 function confirmarDar(el,code,num){
   const key=kk(code,num),r=ST.reps[key]||0;
-  if(r<=0){showToast('No more duplicates of this one',1);return;}
-  ST.reps[key]=r-1;save();
+  if(r<=0){showToast('Ya no tenés repetidas de esta',1);return;}
+  ST.reps[key]=r-1;
+  ST.intercambios.dadas=(ST.intercambios.dadas||0)+1;
+  save();
   el.style.background='#bbb';el.style.color='#fff';el.style.pointerEvents='none';
   el.textContent=el.textContent.replace(' ✓?',' ✓');
-  showToast('Duplicate removed ✓');updateBadges();
+  showToast('Repetida descontada ✓');updateBadges();
+  document.getElementById('s-idad').textContent=ST.intercambios.dadas;
 }
 
 function confirmarRecibir(el,code,num){
-  const key=kk(code,num);ST.figs[key]=true;save();
+  const key=kk(code,num);ST.figs[key]=true;
+  ST.intercambios.recibidas=(ST.intercambios.recibidas||0)+1;
+  save();
   el.style.background='#1D9E75';el.style.color='#fff';el.style.pointerEvents='none';
   el.textContent=el.textContent.replace(' ✓?',' ✓');
-  showToast('Sticker marked as collected ✓');
+  showToast('Figurita marcada como conseguida ✓');
   const s=calc(),pct=Math.round(s.tengo/TOT*100);
   document.getElementById('hdr-sub').textContent=s.tengo+' of '+TOT+' · '+pct+'%';
+  document.getElementById('s-irecib').textContent=ST.intercambios.recibidas;
   updateBadges();
 }
 
