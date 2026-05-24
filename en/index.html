@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -7,9 +7,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Album 2026">
-  <meta name="description" content="Panini World Cup 2026 Sticker Album Tracker">
+  <meta name="description" content="Tracker del Album Panini Mundial 2026">
   <link rel="manifest" href="../manifest.json">
-  <title>World Cup 2026 Album</title>
+  <title>Album Mundial 2026</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: system-ui, -apple-system, sans-serif; background: #f5f5f5; color: #111; -webkit-tap-highlight-color: transparent; }
@@ -134,49 +134,49 @@
 <body>
 <div id="app">
   <div class="hdr">
-    <h1>World Cup 2026 Album</h1>
+    <h1>Album Mundial 2026</h1>
     <p id="hdr-sub">Cargando...</p>
   </div>
   <div class="tabs">
     <button class="tab active" onclick="setTab('stats')">Stats</button>
     <button class="tab" onclick="setTab('album')">Album</button>
-    <button class="tab" onclick="setTab('listas')">Lists</button>
-    <button class="tab" onclick="setTab('sobres')">Packs</button>
+    <button class="tab" onclick="setTab('listas')">Listas</button>
+    <button class="tab" onclick="setTab('sobres')">Sobres</button>
   </div>
   <div class="body">
 
     <!-- STATS -->
     <div id="p-stats" class="panel active">
       <div class="card">
-        <div class="prog-lbl"><span>Completed</span><span id="pct-lbl" style="font-weight:700;color:#111">0%</span></div>
+        <div class="prog-lbl"><span>Completado</span><span id="pct-lbl" style="font-weight:700;color:#111">0%</span></div>
         <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
       </div>
       <div class="sgrid">
-        <div class="scard"><div class="slbl">Have</div><div class="sval" id="s-tengo">0</div><div class="ssub">of 994 stickers</div></div>
-        <div class="scard"><div class="slbl">Missing</div><div class="sval" id="s-faltan">993</div><div class="ssub">stickers</div></div>
-        <div class="scard"><div class="slbl">Duplicates</div><div class="sval" id="s-rep">0</div><div class="ssub">total</div></div>
-        <div class="scard"><div class="slbl">Complete teams</div><div class="sval" id="s-sels">0</div><div class="ssub">of 48</div></div>
+        <div class="scard"><div class="slbl">Tengo</div><div class="sval" id="s-tengo">0</div><div class="ssub">de 993 figuritas</div></div>
+        <div class="scard"><div class="slbl">Me faltan</div><div class="sval" id="s-faltan">993</div><div class="ssub">figuritas</div></div>
+        <div class="scard"><div class="slbl">Repetidas</div><div class="sval" id="s-rep">0</div><div class="ssub">total</div></div>
+        <div class="scard"><div class="slbl">Sels. completas</div><div class="sval" id="s-sels">0</div><div class="ssub">de 48</div></div>
       </div>
-      <div class="sec">Estimation</div>
+      <div class="sec">Estimacion</div>
       <div class="card">
-        <div class="est-row"><span class="est-lbl">Packs bought</span><span id="e-comp">0</span></div>
-        <div class="est-row"><span class="est-lbl">Packs gifted</span><span id="e-reg">0</span></div>
-        <div class="est-row"><span class="est-lbl">Total packs</span><span id="e-tot">0</span></div>
-        <div class="est-row"><span class="est-lbl">New stickers per pack</span><span id="e-prom">-</span></div>
-        <div class="est-row"><span class="est-lbl">Packs still needed (est.)</span><span id="e-falt">-</span></div>
+        <div class="est-row"><span class="est-lbl">Sobres comprados</span><span id="e-comp">0</span></div>
+        <div class="est-row"><span class="est-lbl">Sobres regalados</span><span id="e-reg">0</span></div>
+        <div class="est-row"><span class="est-lbl">Total sobres</span><span id="e-tot">0</span></div>
+        <div class="est-row"><span class="est-lbl">Fig. nuevas por sobre</span><span id="e-prom">-</span></div>
+        <div class="est-row"><span class="est-lbl">Sobres que faltan (est.)</span><span id="e-falt">-</span></div>
       </div>
       <div class="sec">Backup</div>
       <div class="backup-card">
-        <div class="backup-title">Export data</div>
-        <div class="backup-sub">Save a copy of your progress</div>
-        <button class="backup-btn export" onclick="exportarBackup()">📤 Export &amp; copy</button>
+        <div class="backup-title">Exportar datos</div>
+        <div class="backup-sub">Guardá una copia de tu progreso</div>
+        <button class="backup-btn export" onclick="exportarBackup()">📤 Exportar y copiar</button>
         <textarea class="backup-textarea" id="ta-export" readonly></textarea>
 
         <div class="backup-title" style="margin-top:14px">Importar datos</div>
-        <div class="backup-sub">Restore from a previous backup</div>
-        <button class="backup-btn import" onclick="mostrarImport()">📥 Import data</button>
-        <textarea class="backup-textarea" id="ta-import" placeholder="Paste your previously exported text here..."></textarea>
-        <button class="backup-confirm" id="btn-confirm-import" onclick="confirmarImport()">✓ Confirm import</button>
+        <div class="backup-sub">Restaurá desde una copia anterior</div>
+        <button class="backup-btn import" onclick="mostrarImport()">📥 Importar datos</button>
+        <textarea class="backup-textarea" id="ta-import" placeholder="Pegá acá el texto exportado anteriormente..."></textarea>
+        <button class="backup-confirm" id="btn-confirm-import" onclick="confirmarImport()">✓ Confirmar importación</button>
       </div>
     </div>
 
@@ -185,13 +185,13 @@
       <div id="album-content"></div>
     </div>
 
-    <!-- LISTS -->
+    <!-- LISTAS -->
     <div id="p-listas" class="panel">
-      <div class="sec">Your lists</div>
+      <div class="sec">Tus listas</div>
       <div class="lista-card">
         <div class="lista-hdr" onclick="toggleLista('faltan')">
           <div style="display:flex;align-items:center;gap:8px">
-            <span style="font-size:14px;font-weight:700;color:#111">📋 Missing</span>
+            <span style="font-size:14px;font-weight:700;color:#111">📋 Me faltan</span>
             <span class="lista-badge" id="badge-faltan">-</span>
           </div>
           <span class="lista-arrow" id="arrow-faltan">▶</span>
@@ -199,15 +199,15 @@
         <div id="body-faltan" style="display:none">
           <div class="lista-body" id="content-faltan"></div>
           <div style="padding:0 14px 14px">
-            <button class="export-btn" onclick="exportarLista('faltan')">📋 Copy list to clipboard</button>
+            <button class="export-btn" onclick="exportarLista('faltan')">📋 Copiar lista al portapapeles</button>
             <textarea class="export-area" id="ta-faltan" readonly></textarea>
           </div>
         </div>
       </div>
       <div class="lista-card">
-        <div class="lista-hdr" onclick="toggleLista('dup')">
+        <div class="lista-hdr" onclick="toggleLista('rep')">
           <div style="display:flex;align-items:center;gap:8px">
-            <span style="font-size:14px;font-weight:700;color:#111">🔁 Duplicates</span>
+            <span style="font-size:14px;font-weight:700;color:#111">🔁 Repetidas</span>
             <span class="lista-badge" id="badge-rep">-</span>
           </div>
           <span class="lista-arrow" id="arrow-rep">▶</span>
@@ -215,35 +215,35 @@
         <div id="body-rep" style="display:none">
           <div class="lista-body" id="content-rep"></div>
           <div style="padding:0 14px 14px">
-            <button class="export-btn" onclick="exportarLista('dup')">📋 Copy list to clipboard</button>
+            <button class="export-btn" onclick="exportarLista('rep')">📋 Copiar lista al portapapeles</button>
             <textarea class="export-area" id="ta-rep" readonly></textarea>
           </div>
         </div>
       </div>
 
       <!-- INTERCAMBIO -->
-      <div class="sec" style="margin-top:16px">Trade</div>
+      <div class="sec" style="margin-top:16px">Intercambio</div>
       <div class="lista-card">
         <div class="lista-hdr" onclick="toggleLista('intercambio')">
           <div style="display:flex;align-items:center;gap:8px">
-            <span style="font-size:14px;font-weight:700;color:#111">🤝 Trade</span>
+            <span style="font-size:14px;font-weight:700;color:#111">🤝 Intercambio</span>
           </div>
           <span class="lista-arrow" id="arrow-intercambio">▶</span>
         </div>
         <div id="body-intercambio" style="display:none">
           <div class="lista-body">
 
-            <div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:8px">Share my list</div>
-            <div style="font-size:12px;color:#666;margin-bottom:10px">Generate your block and send it to a friend who also uses the app.</div>
-            <button class="export-btn" onclick="generarBloqueIntercambio()">📤 Generate and copy my list</button>
+            <div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:8px">Compartir mi lista</div>
+            <div style="font-size:12px;color:#666;margin-bottom:10px">Generá tu bloque y mandáselo a un amigo que también use la app.</div>
+            <button class="export-btn" onclick="generarBloqueIntercambio()">📤 Generar y copiar mi lista</button>
             <textarea class="export-area" id="ta-intercambio-out" readonly style="display:none;margin-top:8px"></textarea>
 
             <div style="border-top:1px solid #eee;margin:16px 0"></div>
 
-            <div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:8px">Match with a friend</div>
-            <div style="font-size:12px;color:#666;margin-bottom:10px">Paste the block your friend sent you and we'll show what you can trade.</div>
-            <textarea id="ta-intercambio-in" placeholder="Paste your friend's block here..." style="width:100%;padding:10px;font-size:12px;font-family:monospace;border:2px solid #ddd;border-radius:8px;background:#f9f9f9;color:#111;resize:vertical;min-height:80px;box-sizing:border-box"></textarea>
-            <button class="export-btn" onclick="cruzarLista()" style="margin-top:8px">🔄 Match lists</button>
+            <div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:8px">Cruzar con un amigo</div>
+            <div style="font-size:12px;color:#666;margin-bottom:10px">Pegá el bloque que te mandaron y te mostramos qué pueden intercambiar.</div>
+            <textarea id="ta-intercambio-in" placeholder="Pegá acá el bloque de tu amigo..." style="width:100%;padding:10px;font-size:12px;font-family:monospace;border:2px solid #ddd;border-radius:8px;background:#f9f9f9;color:#111;resize:vertical;min-height:80px;box-sizing:border-box"></textarea>
+            <button class="export-btn" onclick="cruzarLista()" style="margin-top:8px">🔄 Cruzar lista</button>
             <div id="resultado-cruce" style="margin-top:12px"></div>
 
           </div>
@@ -251,12 +251,12 @@
       </div>
     </div>
 
-    <!-- PACKS -->
+    <!-- SOBRES -->
     <div id="p-sobres" class="panel">
-      <div class="sec">Packs bought</div>
+      <div class="sec">Sobres comprados</div>
       <div class="card">
         <div class="sobrow">
-          <div><div style="font-size:14px;font-weight:700;color:#111">Bought</div><div style="font-size:11px;color:#888">with your own money</div></div>
+          <div><div style="font-size:14px;font-weight:700;color:#111">Comprados</div><div style="font-size:11px;color:#888">con tu plata</div></div>
           <div class="cctrl">
             <button class="cbtn" onclick="chgComp(-1)">−</button>
             <span class="cnum" id="cnt-comp">0</span>
@@ -264,27 +264,27 @@
           </div>
         </div>
         <div class="sobrow">
-          <div style="font-size:14px;font-weight:700;color:#111">Total packs</div>
+          <div style="font-size:14px;font-weight:700;color:#111">Total sobres</div>
           <span class="cnum" id="cnt-tot">0</span>
         </div>
       </div>
-      <div class="sec">Log gifted packs</div>
+      <div class="sec">Registrar sobres regalados</div>
       <div class="add-form">
-        <div style="font-size:13px;font-weight:700;color:#0F6E56;margin-bottom:10px">+ Add gift</div>
+        <div style="font-size:13px;font-weight:700;color:#0F6E56;margin-bottom:10px">+ Agregar regalo</div>
         <div class="add-row">
-          <input class="add-input" id="reg-nombre" type="text" placeholder="Name of who gifted..." maxlength="40">
+          <input class="add-input" id="reg-nombre" type="text" placeholder="Nombre de quien regaló..." maxlength="40">
           <div class="cctrl">
             <button class="cbtn sm" onclick="chgRegInput(-1)">−</button>
             <span class="cnum sm" id="reg-cant">1</span>
             <button class="cbtn sm" onclick="chgRegInput(1)">+</button>
           </div>
-          <button class="add-btn" onclick="agregarRegalo()">Add</button>
+          <button class="add-btn" onclick="agregarRegalo()">Agregar</button>
         </div>
-        <div style="font-size:11px;color:#0F6E56;margin-top:8px">packs to log</div>
+        <div style="font-size:11px;color:#0F6E56;margin-top:8px">sobres a registrar</div>
       </div>
-      <div class="sec">Gifted by person</div>
+      <div class="sec">Regalados por persona</div>
       <div class="reg-card" id="regaladores-list"></div>
-      <p style="font-size:12px;color:#999;text-align:center;margin-bottom:14px">Each pack contains 5 stickers.</p>
+      <p style="font-size:12px;color:#999;text-align:center;margin-bottom:14px">Cada sobre trae 7 figuritas.</p>
     </div>
 
   </div>
@@ -292,14 +292,14 @@
 
 <div class="toast" id="toast"></div>
 <div id="install-banner">
-  <div><p style="font-size:13px;font-weight:600">Install as app</p><small style="font-size:11px;opacity:0.85">Works offline and without a browser</small></div>
-  <button class="install-btn" id="install-btn">Install</button>
+  <div><p style="font-size:13px;font-weight:600">Instalar como app</p><small style="font-size:11px;opacity:0.85">Funciona offline y sin navegador</small></div>
+  <button class="install-btn" id="install-btn">Instalar</button>
   <button class="install-close" onclick="document.getElementById('install-banner').style.display='none'">✕</button>
 </div>
 
 <script>
 const SELS=['MEX','RSA','KOR','CZE','CAN','BIH','QAT','SUI','BRA','MAR','HAI','SCO','USA','PAR','AUS','TUR','GER','CUW','CIV','ECU','NED','JPN','SWE','TUN','BEL','EGY','IRN','NZL','ESP','CPV','KSA','URU','FRA','SEN','IRQ','NOR','ARG','ALG','AUT','JOR','POR','COD','UZB','COL','ENG','CRO','GHA','PAN'];
-const NAMES={MEX:'🇲🇽 Mexico',RSA:'🇿🇦 South Africa',KOR:'🇰🇷 South Korea',CZE:'🇨🇿 Czech Republic',CAN:'🇨🇦 Canada',BIH:'🇧🇦 Bosnia & Herz.',QAT:'🇶🇦 Qatar',SUI:'🇨🇭 Switzerland',BRA:'🇧🇷 Brazil',MAR:'🇲🇦 Morocco',HAI:'🇭🇹 Haiti',SCO:'🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland',USA:'🇺🇸 United States',PAR:'🇵🇾 Paraguay',AUS:'🇦🇺 Australia',TUR:'🇹🇷 Türkiye',GER:'🇩🇪 Germany',CUW:'🇨🇼 Curaçao',CIV:'🇨🇮 Ivory Coast',ECU:'🇪🇨 Ecuador',NED:'🇳🇱 Netherlands',JPN:'🇯🇵 Japan',SWE:'🇸🇪 Sweden',TUN:'🇹🇳 Tunisia',BEL:'🇧🇪 Belgium',EGY:'🇪🇬 Egypt',IRN:'🇮🇷 Iran',NZL:'🇳🇿 New Zealand',ESP:'🇪🇸 Spain',CPV:'🇨🇻 Cape Verde',KSA:'🇸🇦 Saudi Arabia',URU:'🇺🇾 Uruguay',FRA:'🇫🇷 France',SEN:'🇸🇳 Senegal',IRQ:'🇮🇶 Iraq',NOR:'🇳🇴 Norway',ARG:'🇦🇷 Argentina',ALG:'🇩🇿 Algeria',AUT:'🇦🇹 Austria',JOR:'🇯🇴 Jordan',POR:'🇵🇹 Portugal',COD:'🇨🇩 DR Congo',UZB:'🇺🇿 Uzbekistan',COL:'🇨🇴 Colombia',ENG:'🏴󠁧󠁢󠁥󠁮󠁧󠁿 England',CRO:'🇭🇷 Croatia',GHA:'🇬🇭 Ghana',PAN:'🇵🇦 Panama',FWC:'🏆 FWC Football World Cup',CC:'🥤 Coca Cola'};
+const NAMES={MEX:'🇲🇽 México',RSA:'🇿🇦 Sudáfrica',KOR:'🇰🇷 Corea del Sur',CZE:'🇨🇿 Rep. Checa',CAN:'🇨🇦 Canadá',BIH:'🇧🇦 Bosnia y Herz.',QAT:'🇶🇦 Catar',SUI:'🇨🇭 Suiza',BRA:'🇧🇷 Brasil',MAR:'🇲🇦 Marruecos',HAI:'🇭🇹 Haití',SCO:'🏴󠁧󠁢󠁳󠁣󠁴󠁿 Escocia',USA:'🇺🇸 Estados Unidos',PAR:'🇵🇾 Paraguay',AUS:'🇦🇺 Australia',TUR:'🇹🇷 Türkiye',GER:'🇩🇪 Alemania',CUW:'🇨🇼 Curazao',CIV:'🇨🇮 Costa de Marfil',ECU:'🇪🇨 Ecuador',NED:'🇳🇱 Países Bajos',JPN:'🇯🇵 Japón',SWE:'🇸🇪 Suecia',TUN:'🇹🇳 Túnez',BEL:'🇧🇪 Bélgica',EGY:'🇪🇬 Egipto',IRN:'🇮🇷 Irán',NZL:'🇳🇿 Nueva Zelanda',ESP:'🇪🇸 España',CPV:'🇨🇻 Cabo Verde',KSA:'🇸🇦 Arabia Saudita',URU:'🇺🇾 Uruguay',FRA:'🇫🇷 Francia',SEN:'🇸🇳 Senegal',IRQ:'🇮🇶 Irak',NOR:'🇳🇴 Noruega',ARG:'🇦🇷 Argentina',ALG:'🇩🇿 Argelia',AUT:'🇦🇹 Austria',JOR:'🇯🇴 Jordania',POR:'🇵🇹 Portugal',COD:'🇨🇩 Congo (RD)',UZB:'🇺🇿 Uzbekistán',COL:'🇨🇴 Colombia',ENG:'🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra',CRO:'🇭🇷 Croacia',GHA:'🇬🇭 Ghana',PAN:'🇵🇦 Panamá',FWC:'🏆 FWC Football World Cup',CC:'🥤 Coca Cola'};
 const ALL_SELS=[...SELS,'FWC','CC'];
 // FWC: 20 figuritas numeradas 00-19 (índice 0=00, índice 1=1 ... 19=19)
 const FN=20,CN=14,SN=20,TOT=994,LS='panini2026_data';
@@ -317,12 +317,12 @@ function load(){
   try{
     const r=localStorage.getItem(LS);
     if(r){const p=JSON.parse(r);if(p){ST.figs=p.figs||{};ST.reps=p.reps||{};ST.sobres=p.sobres||{comprados:0};ST.regaladores=p.regaladores||[];if(typeof ST.sobres.regalados==='number')delete ST.sobres.regalados;}}
-  }catch(e){showToast('Error loading data',1);}
+  }catch(e){showToast('Error al cargar',1);}
   renderAll();
 }
 
 function save(){
-  try{localStorage.setItem(LS,JSON.stringify({figs:ST.figs,reps:ST.reps,sobres:ST.sobres,regaladores:ST.regaladores}));showToast('Saved ✓');}
+  try{localStorage.setItem(LS,JSON.stringify({figs:ST.figs,reps:ST.reps,sobres:ST.sobres,regaladores:ST.regaladores}));showToast('Guardado ✓');}
   catch(e){showToast('Error: '+e.message,1);}
 }
 
@@ -344,7 +344,7 @@ function calc(){
 
 function renderAll(){
   const s=calc(),comp=ST.sobres.comprados||0,reg=totalReg(),tot=comp+reg,pct=Math.round(s.tengo/TOT*100);
-  document.getElementById('hdr-sub').textContent=s.tengo+' of '+TOT+' · '+pct+'%';
+  document.getElementById('hdr-sub').textContent=s.tengo+' de '+TOT+' · '+pct+'%';
   document.getElementById('pct-lbl').textContent=pct+'%';
   document.getElementById('prog-fill').style.width=pct+'%';
   document.getElementById('s-tengo').textContent=s.tengo;
@@ -361,7 +361,7 @@ function renderAll(){
   const prom=tot>0&&nuevas>0?nuevas/tot:null;
   if(prom){
     document.getElementById('e-prom').textContent=prom.toFixed(2);
-    document.getElementById('e-falt').textContent=Math.ceil(s.faltan/prom)+' packs';
+    document.getElementById('e-falt').textContent=Math.ceil(s.faltan/prom)+' sobres';
   }else{
     document.getElementById('e-prom').textContent='-';
     document.getElementById('e-falt').textContent='-';
@@ -377,8 +377,8 @@ function exportarBackup(){
   const ta=document.getElementById('ta-export');
   ta.value=data;ta.classList.add('vis');ta.select();
   try{
-    navigator.clipboard.writeText(data).then(()=>showToast('Data copied ✓')).catch(()=>showToast('Select the text and copy manually'));
-  }catch(e){try{document.execCommand('copy');showToast('Data copied ✓');}catch(_){showToast('Select the text and copy manually');}}
+    navigator.clipboard.writeText(data).then(()=>showToast('Datos copiados ✓')).catch(()=>showToast('Seleccioná el texto y copiá manualmente'));
+  }catch(e){try{document.execCommand('copy');showToast('Datos copiados ✓');}catch(_){showToast('Seleccioná el texto y copiá manualmente');}}
 }
 
 function mostrarImport(){
@@ -390,12 +390,12 @@ function confirmarImport(){
   const ta=document.getElementById('ta-import');
   try{
     const p=JSON.parse(ta.value.trim());
-    if(!p||typeof p.figs!=='object') throw new Error('Invalid format');
+    if(!p||typeof p.figs!=='object') throw new Error('Formato inválido');
     ST.figs=p.figs||{};ST.reps=p.reps||{};ST.sobres=p.sobres||{comprados:0};ST.regaladores=p.regaladores||[];
     save();
     ta.classList.remove('vis');document.getElementById('btn-confirm-import').classList.remove('vis');ta.value='';
-    showToast('Data imported ✓');renderAll();
-  }catch(e){showToast('Error: invalid text',1);}
+    showToast('Datos importados ✓');renderAll();
+  }catch(e){showToast('Error: el texto no es válido',1);}
 }
 
 function buildFaltantes(){
@@ -406,16 +406,16 @@ function buildRepetidas(){
 }
 function updateBadges(){
   const falt=buildFaltantes(),rep=buildRepetidas();
-  document.getElementById('badge-faltan').textContent=falt.reduce((s,x)=>s+x.nums.length,0)+' stickers';
-  document.getElementById('badge-rep').textContent=rep.reduce((s,x)=>s+x.items.reduce((a,r)=>a+r.cant,0),0)+' stickers';
+  document.getElementById('badge-faltan').textContent=falt.reduce((s,x)=>s+x.nums.length,0)+' figuritas';
+  document.getElementById('badge-rep').textContent=rep.reduce((s,x)=>s+x.items.reduce((a,r)=>a+r.cant,0),0)+' figuritas';
 }
 function toggleLista(tipo){
   listaOpen[tipo]=!listaOpen[tipo];
   document.getElementById('body-'+tipo).style.display=listaOpen[tipo]?'block':'none';
   document.getElementById('arrow-'+tipo).className='lista-arrow'+(listaOpen[tipo]?' open':'');
-  if(tipo==='faltan'||tipo==='dup') document.getElementById('ta-'+tipo).style.display='none';
+  if(tipo==='faltan'||tipo==='rep') document.getElementById('ta-'+tipo).style.display='none';
   if(listaOpen[tipo]&&tipo==='faltan')renderListaFaltan();
-  if(listaOpen[tipo]&&tipo==='dup')renderListaRep();
+  if(listaOpen[tipo]&&tipo==='rep')renderListaRep();
 }
 function renderListaFaltan(){
   const falt=buildFaltantes(),el=document.getElementById('content-faltan');
@@ -432,14 +432,14 @@ function exportarLista(tipo){
   let txt='';
   if(tipo==='faltan'){
     const falt=buildFaltantes();
-    txt=!falt.length?'You have all the stickers! 🎉':'FIGURITAS QUE ME FALTAN — Album Mundial 2026\n'+'='.repeat(44)+'\n\n'+falt.map(({code,name,nums})=>code+' ('+name+'): '+nums.join(', ')).join('\n')+'\n\nTotal: '+falt.reduce((s,x)=>s+x.nums.length,0)+' stickers';
+    txt=!falt.length?'¡No te falta ninguna figurita! 🎉':'FIGURITAS QUE ME FALTAN — Album Mundial 2026\n'+'='.repeat(44)+'\n\n'+falt.map(({code,name,nums})=>code+' ('+name+'): '+nums.join(', ')).join('\n')+'\n\nTotal: '+falt.reduce((s,x)=>s+x.nums.length,0)+' figuritas';
   }else{
     const rep=buildRepetidas();
-    txt=!rep.length?'No duplicates yet.':'FIGURITAS REPETIDAS — Album Mundial 2026\n'+'='.repeat(42)+'\n\n'+rep.map(({code,name,items})=>code+' ('+name+'): '+items.map(({num,cant})=>num+(cant>1?' (×'+cant+')':'')).join(', ')).join('\n')+'\n\nTotal: '+rep.reduce((s,x)=>s+x.items.reduce((a,r)=>a+r.cant,0),0)+' figuritas repetidas';
+    txt=!rep.length?'No tenés repetidas todavía.':'FIGURITAS REPETIDAS — Album Mundial 2026\n'+'='.repeat(42)+'\n\n'+rep.map(({code,name,items})=>code+' ('+name+'): '+items.map(({num,cant})=>num+(cant>1?' (×'+cant+')':'')).join(', ')).join('\n')+'\n\nTotal: '+rep.reduce((s,x)=>s+x.items.reduce((a,r)=>a+r.cant,0),0)+' figuritas repetidas';
   }
   ta.value=txt;ta.style.display='block';ta.select();
-  try{navigator.clipboard.writeText(txt).then(()=>showToast('List copied ✓')).catch(()=>showToast('Select and copy manually'));}
-  catch(e){try{document.execCommand('copy');showToast('List copied ✓');}catch(_){showToast('Select and copy manually');}}
+  try{navigator.clipboard.writeText(txt).then(()=>showToast('Lista copiada ✓')).catch(()=>showToast('Seleccioná y copiá manualmente'));}
+  catch(e){try{document.execCommand('copy');showToast('Lista copiada ✓');}catch(_){showToast('Seleccioná y copiá manualmente');}}
 }
 
 function renderAlbum(){
@@ -448,10 +448,10 @@ function renderAlbum(){
   const q=query.toLowerCase().trim();
   const fs=SELS.filter(s=>!q||s.toLowerCase().includes(q)||getName(s).toLowerCase().includes(q));
   const sp=['FWC','CC'].filter(s=>!q||s.toLowerCase().includes(q)||getName(s).toLowerCase().includes(q));
-  let h='<div class="search-wrap"><span class="search-icon">🔍</span><input class="search-input" type="text" placeholder="Search team..." value="'+esc(query)+'" oninput="onSearch(this.value)" id="search-box"><button class="search-clear'+(query?' vis':'')+'" onclick="clearSearch()">✕</button></div>';
+  let h='<div class="search-wrap"><span class="search-icon">🔍</span><input class="search-input" type="text" placeholder="Buscar selección..." value="'+esc(query)+'" oninput="onSearch(this.value)" id="search-box"><button class="search-clear'+(query?' vis':'')+'" onclick="clearSearch()">✕</button></div>';
   if(!fs.length&&!sp.length){h+='<div class="no-results">Sin resultados para "'+esc(query)+'"</div>';c.innerHTML=h;return;}
   if(fs.length){
-    h+='<div class="sec">Selecciones ('+(query?fs.length+' result'+(fs.length!==1?'s':''):'48')+')</div><div class="sgrid2">';
+    h+='<div class="sec">Selecciones ('+(query?fs.length+' resultado'+(fs.length!==1?'s':''):'48')+')</div><div class="sgrid2">';
     fs.forEach(sel=>{
       let cnt=0;for(let i=1;i<=SN;i++)if(ST.figs[kk(sel,i)])cnt++;
       const p=Math.round(cnt/SN*100),done=cnt===SN;
@@ -482,7 +482,7 @@ function renderFigs(container,sel){
   for(let i=startI;i<=(sel==='FWC'?FN-1:n);i++){
     const key=kk(sel,i),t=!!ST.figs[key],r=ST.reps[key]||0;
     const lbl=sel==='FWC'?fwcNum(i):i;
-    h+='<div class="fitem"><button class="fbtn'+(t?' t':'')+'" onclick="tog(\''+sel+'\','+i+')">'+lbl+'</button><span class="rbadge'+(r>0?' hr':'')+'" onclick="addR(\''+sel+'\','+i+')">'+(r>0?'×'+r:'dup')+'</span></div>';
+    h+='<div class="fitem"><button class="fbtn'+(t?' t':'')+'" onclick="tog(\''+sel+'\','+i+')">'+lbl+'</button><span class="rbadge'+(r>0?' hr':'')+'" onclick="addR(\''+sel+'\','+i+')">'+(r>0?'×'+r:'rep')+'</span></div>';
   }
   h+='</div></div>';container.innerHTML=h;
 }
@@ -492,7 +492,7 @@ function navSel(dir){const idx=ALL_SELS.indexOf(act),next=idx+dir;if(next>=0&&ne
 function tog(sel,num){
   const key=kk(sel,num),was=!!ST.figs[key];ST.figs[key]=!was;if(was)ST.reps[key]=0;
   save();renderFigs(document.getElementById('album-content'),sel);
-  const s=calc(),pct=Math.round(s.tengo/TOT*100);document.getElementById('hdr-sub').textContent=s.tengo+' of '+TOT+' · '+pct+'%';updateBadges();
+  const s=calc(),pct=Math.round(s.tengo/TOT*100);document.getElementById('hdr-sub').textContent=s.tengo+' de '+TOT+' · '+pct+'%';updateBadges();
 }
 function addR(sel,num){const key=kk(sel,num);if(!ST.figs[key])return;ST.reps[key]=(ST.reps[key]||0)+1;save();renderFigs(document.getElementById('album-content'),sel);updateBadges();}
 
@@ -500,13 +500,13 @@ function chgComp(d){ST.sobres.comprados=Math.max(0,(ST.sobres.comprados||0)+d);s
 function chgRegInput(d){regCant=Math.max(1,regCant+d);document.getElementById('reg-cant').textContent=regCant;}
 function agregarRegalo(){
   const inp=document.getElementById('reg-nombre'),nombre=(inp.value||'').trim();
-  if(!nombre){inp.focus();showToast('Please enter a name',1);return;}
+  if(!nombre){inp.focus();showToast('Ingresá un nombre',1);return;}
   const idx=ST.regaladores.findIndex(r=>r.nombre.toLowerCase()===nombre.toLowerCase());
   if(idx>=0)ST.regaladores[idx].sobres+=regCant;else ST.regaladores.push({nombre,sobres:regCant});
   inp.value='';regCant=1;document.getElementById('reg-cant').textContent='1';save();renderAll();
 }
 function chgRegalador(idx,d){ST.regaladores[idx].sobres=Math.max(0,ST.regaladores[idx].sobres+d);if(ST.regaladores[idx].sobres===0)ST.regaladores.splice(idx,1);save();renderAll();}
-function delRegalador(idx){const n=ST.regaladores[idx].nombre;ST.regaladores.splice(idx,1);save();renderAll();showToast(n+' removed');}
+function delRegalador(idx){const n=ST.regaladores[idx].nombre;ST.regaladores.splice(idx,1);save();renderAll();showToast(n+' eliminado');}
 function renderRegaladores(){
   const el=document.getElementById('regaladores-list');if(!el)return;
   const sorted=[...ST.regaladores].sort((a,b)=>b.sobres-a.sobres),tot=totalReg();
@@ -514,7 +514,7 @@ function renderRegaladores(){
   let h='<div class="reg-hdr"><span style="font-size:13px;font-weight:700;color:#111">'+sorted.length+' persona'+(sorted.length!==1?'s':'')+' regalaron</span><span style="font-size:12px;color:#888">'+tot+' sobres</span></div>';
   sorted.forEach(r=>{
     const idx=ST.regaladores.findIndex(x=>x.nombre===r.nombre);
-    h+='<div class="reg-row"><div><div style="font-size:14px;font-weight:600;color:#111">'+esc(r.nombre)+'</div><div style="font-size:11px;color:#aaa">'+(r.sobres===1?'1 pack':r.sobres+' packs')+'</div></div>'
+    h+='<div class="reg-row"><div><div style="font-size:14px;font-weight:600;color:#111">'+esc(r.nombre)+'</div><div style="font-size:11px;color:#aaa">'+(r.sobres===1?'1 sobre':r.sobres+' sobres')+'</div></div>'
       +'<div style="display:flex;align-items:center;gap:8px"><span style="font-size:14px;font-weight:700;color:#1D9E75">'+r.sobres+' 📦</span>'
       +'<button class="cbtn sm" onclick="chgRegalador('+idx+',-1)">−</button><button class="cbtn sm" onclick="chgRegalador('+idx+',1)">+</button>'
       +'<button class="reg-del" onclick="delRegalador('+idx+')">✕</button></div></div>';
@@ -530,8 +530,8 @@ function generarBloqueIntercambio(){
   const bloque='PANINI2026\nFALTAN:'+linFaltan+'\nREPITO:'+linReps;
   const ta=document.getElementById('ta-intercambio-out');
   ta.value=bloque;ta.style.display='block';ta.select();
-  try{navigator.clipboard.writeText(bloque).then(()=>showToast('List copied ✓')).catch(()=>showToast('Select and copy manually'));}
-  catch(e){try{document.execCommand('copy');showToast('List copied ✓');}catch(_){showToast('Select and copy manually');}}
+  try{navigator.clipboard.writeText(bloque).then(()=>showToast('Lista copiada ✓')).catch(()=>showToast('Seleccioná y copiá manualmente'));}
+  catch(e){try{document.execCommand('copy');showToast('Lista copiada ✓');}catch(_){showToast('Seleccioná y copiá manualmente');}}
 }
 
 function cruzarLista(){
@@ -589,13 +589,13 @@ function cruzarLista(){
     if(puedoPedirle.length){
       h+='<div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:6px">Te puede dar</div>';
       h+='<div class="lista-sel-block"><div class="chips">';
-      puedoPedirle.forEach(({code,nums})=>{nums.forEach(n=>{h+='<span class="chip-falta">'+code+' '+n+'</span>';});});
+      puedoPedirle.forEach(({code,nums})=>{nums.forEach(n=>{const rawN=code==='FWC'?(n==='00'?0:parseInt(n)):n;h+='<span class="chip-falta" style="cursor:pointer" onclick="confirmarRecibir(this,''+code+'','+rawN+')" title="Tap para confirmar que la recibiste">'+code+' '+n+' ✓?</span>';});});
       h+='</div></div>';
     }
     if(puedoDarle.length){
       h+='<div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.3px;margin:12px 0 6px">Le podés dar</div>';
       h+='<div class="lista-sel-block"><div class="chips">';
-      puedoDarle.forEach(({code,nums})=>{nums.forEach(n=>{h+='<span class="chip-rep">'+code+' '+n+'</span>';});});
+      puedoDarle.forEach(({code,nums})=>{nums.forEach(n=>{const rawN=code==='FWC'?(n==='00'?0:parseInt(n)):n;h+='<span class="chip-rep" style="cursor:pointer" onclick="confirmarDar(this,''+code+'','+rawN+')" title="Tap para confirmar que la diste">'+code+' '+n+' ✓?</span>';});});
       h+='</div></div>';
     }
 
@@ -603,7 +603,7 @@ function cruzarLista(){
     const totalPedir=puedoPedirle.reduce((s,x)=>s+x.nums.length,0);
     const posibles=Math.min(totalDar,totalPedir);
     if(posibles>0){
-      h+='<div style="margin-top:12px;padding:10px;background:#edfaf4;border-radius:8px;font-size:13px;color:#0F6E56;font-weight:700;text-align:center">✓ Pueden intercambiar '+posibles+' figurita'+(posibles!==1?'s':'')+' 1 a 1</div>';
+      h+='<div style="margin-top:12px;padding:10px;background:#edfaf4;border-radius:8px;font-size:13px;color:#0F6E56;font-weight:700;text-align:center">Tapeá cada figurita para confirmar el intercambio ('+posibles+' posible'+(posibles!==1?'s':'')+')</div>';
     }
     el.innerHTML=h;
   }catch(e){
@@ -633,7 +633,7 @@ function cruzarListaFiguritasApp(raw,el){
   let section=null;
   for(const line of lines){
     if(/^me faltan$/i.test(line)){section='faltan';continue;}
-    if(/^repetidas$/i.test(line)){section='dup';continue;}
+    if(/^repetidas$/i.test(line)){section='rep';continue;}
     if(!section) continue;
     const parsed=parseFiguritasLine(line);
     if(!parsed) continue;
@@ -673,26 +673,26 @@ function cruzarListaFiguritasApp(raw,el){
     h+='</div></div>';
   }
   const posibles=Math.min(puedoDarle.reduce((s,x)=>s+x.items.length,0),puedoPedirle.reduce((s,x)=>s+x.rawNums.length,0));
-  if(posibles>0) h+='<div style="margin-top:12px;padding:10px;background:#edfaf4;border-radius:8px;font-size:13px;color:#0F6E56;font-weight:700;text-align:center">Tapeá cada figurita para confirmar el intercambio ('+posibles+' possible'+(posibles!==1?'s':'')+')</div>';
+  if(posibles>0) h+='<div style="margin-top:12px;padding:10px;background:#edfaf4;border-radius:8px;font-size:13px;color:#0F6E56;font-weight:700;text-align:center">Tapeá cada figurita para confirmar el intercambio ('+posibles+' posible'+(posibles!==1?'s':'')+')</div>';
   el.innerHTML=h;
 }
 
 function confirmarDar(el,code,num){
   const key=kk(code,num),r=ST.reps[key]||0;
-  if(r<=0){showToast('No more duplicates of this one',1);return;}
+  if(r<=0){showToast('Ya no tenés repetidas de esta',1);return;}
   ST.reps[key]=r-1;save();
   el.style.background='#bbb';el.style.color='#fff';el.style.pointerEvents='none';
   el.textContent=el.textContent.replace(' ✓?',' ✓');
-  showToast('Duplicate removed ✓');updateBadges();
+  showToast('Repetida descontada ✓');updateBadges();
 }
 
 function confirmarRecibir(el,code,num){
   const key=kk(code,num);ST.figs[key]=true;save();
   el.style.background='#1D9E75';el.style.color='#fff';el.style.pointerEvents='none';
   el.textContent=el.textContent.replace(' ✓?',' ✓');
-  showToast('Sticker marked as collected ✓');
+  showToast('Figurita marcada como conseguida ✓');
   const s=calc(),pct=Math.round(s.tengo/TOT*100);
-  document.getElementById('hdr-sub').textContent=s.tengo+' of '+TOT+' · '+pct+'%';
+  document.getElementById('hdr-sub').textContent=s.tengo+' de '+TOT+' · '+pct+'%';
   updateBadges();
 }
 
