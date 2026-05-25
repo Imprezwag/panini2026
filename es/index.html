@@ -621,6 +621,35 @@ function generarSugerido(amigoFaltan, amigoRepite){
 
 function getFlagName(code){return NAMES[code]||code;}
 
+// Mapa solo del emoji de bandera por código
+const FLAGS={MEX:'🇲🇽',RSA:'🇿🇦',KOR:'🇰🇷',CZE:'🇨🇿',CAN:'🇨🇦',BIH:'🇧🇦',QAT:'🇶🇦',SUI:'🇨🇭',BRA:'🇧🇷',MAR:'🇲🇦',HAI:'🇭🇹',SCO:'🏴󠁧󠁢󠁳󠁣󠁴󠁿',USA:'🇺🇸',PAR:'🇵🇾',AUS:'🇦🇺',TUR:'🇹🇷',GER:'🇩🇪',CUW:'🇨🇼',CIV:'🇨🇮',ECU:'🇪🇨',NED:'🇳🇱',JPN:'🇯🇵',SWE:'🇸🇪',TUN:'🇹🇳',BEL:'🇧🇪',EGY:'🇪🇬',IRN:'🇮🇷',NZL:'🇳🇿',ESP:'🇪🇸',CPV:'🇨🇻',KSA:'🇸🇦',URU:'🇺🇾',FRA:'🇫🇷',SEN:'🇸🇳',IRQ:'🇮🇶',NOR:'🇳🇴',ARG:'🇦🇷',ALG:'🇩🇿',AUT:'🇦🇹',JOR:'🇯🇴',POR:'🇵🇹',COD:'🇨🇩',UZB:'🇺🇿',COL:'🇨🇴',ENG:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',CRO:'🇭🇷',GHA:'🇬🇭',PAN:'🇵🇦',FWC:'🏆',CC:'🥤'};
+
+function getFlag(code){return FLAGS[code]||''}
+
+// Genera bloque WhatsApp con banderitas agrupado por selección
+// dar = [{code, nums:[]}], recibir = [{code, nums:[]}]
+function formatCruceWhatsApp(dar, recibir){
+  const fmtLinea=(code,nums)=>{
+    const lbl=nums.map(n=>code==='FWC'?fwcNum(n):n).join(', ');
+    return code+' '+getFlag(code)+': '+lbl;
+  };
+  let txt='🤝 *Propuesta de intercambio*\n\n';
+  txt+='📤 *Te doy:*\n';
+  if(dar.length) dar.forEach(({code,nums})=>{txt+=fmtLinea(code,nums)+'\n';});
+  else txt+='(ninguna)\n';
+  txt+='\n📥 *Me das:*\n';
+  if(recibir.length) recibir.forEach(({code,nums})=>{txt+=fmtLinea(code,nums)+'\n';});
+  else txt+='(ninguna)\n';
+  txt+='\n_Generado con Album Mundial 2026_';
+  return txt;
+}
+
+function copiarCruceWhatsApp(){
+  const ta=document.getElementById('ta-cruce-wa');if(!ta)return;
+  try{navigator.clipboard.writeText(ta.value).then(()=>showToast('Copiado ✓')).catch(()=>showToast('Seleccioná y copiá manualmente'));}
+  catch(e){try{document.execCommand('copy');showToast('Copiado ✓');}catch(_){showToast('Seleccioná y copiá manualmente');}}
+}
+
 function formatSugeridoWhatsApp(dar,pedir){
   if(!dar.length&&!pedir.length) return null;
 
@@ -741,7 +770,17 @@ function cruzarLista(){
     if(posibles>0){
       h+='<div style="margin-top:12px;padding:10px;background:#edfaf4;border-radius:8px;font-size:13px;color:#0F6E56;font-weight:700;text-align:center">Tapeá cada figurita para confirmar el intercambio ('+posibles+' posible'+(posibles!==1?'s':'')+')</div>';
     }
-    // Sugerido
+    // Bloque WhatsApp con todas las figuritas del cruce
+    const txtCruce=formatCruceWhatsApp(
+      puedoDarle.map(({code,nums})=>({code,nums})),
+      puedoPedirle.map(({code,nums})=>({code,nums}))
+    );
+    h+='<div style="border-top:1px solid #eee;margin-top:14px;padding-top:12px">';
+    h+='<div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:6px">📲 Proponer intercambio por WhatsApp</div>';
+    h+='<textarea id="ta-cruce-wa" readonly style="width:100%;padding:10px;font-size:12px;border:1px solid #ddd;border-radius:8px;background:#f9f9f9;color:#111;resize:none;min-height:120px;box-sizing:border-box">'+esc(txtCruce)+'</textarea>';
+    h+='<button class="export-btn" style="margin-top:8px" onclick="copiarCruceWhatsApp()">📋 Copiar propuesta</button>';
+    h+='</div>';
+    // Sugerido por valor
     const amigoFalt2={},amigoRep2={};
     Object.entries(amigoFaltan).forEach(([c,v])=>{amigoFalt2[c]=v;});
     Object.entries(amigoRepite).forEach(([c,v])=>{amigoRep2[c]=v;});
@@ -749,10 +788,9 @@ function cruzarLista(){
     const txt2=formatSugeridoWhatsApp(sug2.dar,sug2.pedir);
     if(txt2){
       h+='<div style="border-top:1px solid #eee;margin-top:14px;padding-top:12px">';
-      h+='<div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:6px">💬 Sugerido para WhatsApp</div>';
-      h+='<div style="font-size:11px;color:#666;margin-bottom:8px">Basado en valor (FWC, especiales #1, CC y comunes por separado)</div>';
+      h+='<div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:6px">💬 Sugerido por valor (FWC, especiales, comunes)</div>';
       h+='<textarea id="ta-sugerido" readonly style="width:100%;padding:10px;font-size:12px;border:1px solid #ddd;border-radius:8px;background:#f9f9f9;color:#111;resize:none;min-height:120px;box-sizing:border-box">'+esc(txt2)+'</textarea>';
-      h+='<button class="export-btn" style="margin-top:8px" onclick="copiarSugerido()">📋 Copiar mensaje</button>';
+      h+='<button class="export-btn" style="margin-top:8px" onclick="copiarSugerido()">📋 Copiar sugerido</button>';
       h+='</div>';
     }
     el.innerHTML=h;
@@ -840,6 +878,16 @@ function cruzarListaFiguritasApp(raw,el){
   }
   const posibles=Math.min(puedoDarle.reduce((s,x)=>s+x.items.length,0),puedoPedirle.reduce((s,x)=>s+x.rawNums.length,0));
   if(posibles>0) h+='<div style="margin-top:12px;padding:10px;background:#edfaf4;border-radius:8px;font-size:13px;color:#0F6E56;font-weight:700;text-align:center">Tapeá cada figurita para confirmar el intercambio ('+posibles+' posible'+(posibles!==1?'s':'')+')</div>';
+  // Bloque WhatsApp con todas las figuritas del cruce
+  const txtCruce=formatCruceWhatsApp(
+    puedoDarle.map(({code,items})=>({code,nums:items.map(x=>x.num)})),
+    puedoPedirle.map(({code,rawNums})=>({code,nums:rawNums}))
+  );
+  h+='<div style="border-top:1px solid #eee;margin-top:14px;padding-top:12px">';
+  h+='<div style="font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:6px">📲 Proponer intercambio por WhatsApp</div>';
+  h+='<textarea id="ta-cruce-wa" readonly style="width:100%;padding:10px;font-size:12px;border:1px solid #ddd;border-radius:8px;background:#f9f9f9;color:#111;resize:none;min-height:120px;box-sizing:border-box">'+esc(txtCruce)+'</textarea>';
+  h+='<button class="export-btn" style="margin-top:8px" onclick="copiarCruceWhatsApp()">📋 Copiar propuesta</button>';
+  h+='</div>';
   el.innerHTML=h;
 }
 
