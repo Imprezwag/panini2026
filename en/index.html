@@ -324,7 +324,7 @@ function load(){
 }
 
 function save(){
-  try{localStorage.setItem(LS,JSON.stringify({figs:ST.figs,reps:ST.reps,sobres:ST.sobres,regaladores:ST.regaladores}));showToast('Saved ✓');}
+  try{localStorage.setItem(LS,JSON.stringify({figs:ST.figs,reps:ST.reps,sobres:ST.sobres,regaladores:ST.regaladores,intercambios:ST.intercambios}));showToast('Saved ✓');}
   catch(e){showToast('Error: '+e.message,1);}
 }
 
@@ -353,8 +353,6 @@ function renderAll(){
   document.getElementById('s-faltan').textContent=s.faltan;
   document.getElementById('s-rep').textContent=s.rep;
   document.getElementById('s-sels').textContent=s.ok;
-  document.getElementById('s-irecib').textContent=ST.intercambios.recibidas||0;
-  document.getElementById('s-idad').textContent=ST.intercambios.dadas||0;
   document.getElementById('s-irecib').textContent=ST.intercambios.recibidas||0;
   document.getElementById('s-idad').textContent=ST.intercambios.dadas||0;
   document.getElementById('e-comp').textContent=comp;
