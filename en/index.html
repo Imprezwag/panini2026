@@ -287,6 +287,30 @@
       <div class="sec">Gifted by person</div>
       <div class="reg-card" id="regaladores-list"></div>
       <p style="font-size:12px;color:#999;text-align:center;margin-bottom:14px">Each pack contains 7 stickers.</p>
+
+      <div class="sec" style="margin-top:20px">Trade log by person</div>
+      <div class="add-form">
+        <div style="font-size:13px;font-weight:700;color:#0F6E56;margin-bottom:10px">+ Log a trade</div>
+        <div class="add-row" style="margin-bottom:8px">
+          <input class="add-input" id="tlog-nombre" type="text" placeholder="Person's name..." maxlength="40">
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+          <div style="display:flex;align-items:center;gap:6px;flex:1;min-width:120px">
+            <span style="font-size:12px;color:#0F6E56;font-weight:600;white-space:nowrap">I gave</span>
+            <button class="cbtn sm" onclick="chgTlogInput('dadas',-1)">−</button>
+            <span class="cnum sm" id="tlog-dadas">0</span>
+            <button class="cbtn sm" onclick="chgTlogInput('dadas',1)">+</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;flex:1;min-width:120px">
+            <span style="font-size:12px;color:#0F6E56;font-weight:600;white-space:nowrap">I got</span>
+            <button class="cbtn sm" onclick="chgTlogInput('recibidas',-1)">−</button>
+            <span class="cnum sm" id="tlog-recibidas">0</span>
+            <button class="cbtn sm" onclick="chgTlogInput('recibidas',1)">+</button>
+          </div>
+          <button class="add-btn" onclick="agregarTlog()">Add</button>
+        </div>
+      </div>
+      <div class="reg-card" id="tlog-list"></div>
     </div>
 
   </div>
@@ -306,8 +330,8 @@ const ALL_SELS=[...SELS,'FWC','CC'];
 // FWC: 20 figuritas numeradas 00-19 (índice 0=00, índice 1=1 ... 19=19)
 const FN=20,CN=14,SN=20,TOT=994,LS='panini2026_data';
 function fwcNum(i){return i===0?'00':String(i);}
-let ST={figs:{},reps:{},sobres:{comprados:0},regaladores:[],intercambios:{recibidas:0,dadas:0}};
-let act=null,tt=null,query='',regCant=1;
+let ST={figs:{},reps:{},sobres:{comprados:0},regaladores:[],intercambios:{recibidas:0,dadas:0,personas:[]}};
+let act=null,tt=null,query='',regCant=1,tlogDadas=0,tlogRecibidas=0;
 let listaOpen={faltan:false,rep:false,intercambio:false};
 
 function kk(c,n){return c+'_'+n;}
@@ -318,7 +342,7 @@ function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').repl
 function load(){
   try{
     const r=localStorage.getItem(LS);
-    if(r){const p=JSON.parse(r);if(p){ST.figs=p.figs||{};ST.reps=p.reps||{};ST.sobres=p.sobres||{comprados:0};ST.regaladores=p.regaladores||[];ST.intercambios=p.intercambios||{recibidas:0,dadas:0};if(typeof ST.sobres.regalados==='number')delete ST.sobres.regalados;}}
+    if(r){const p=JSON.parse(r);if(p){ST.figs=p.figs||{};ST.reps=p.reps||{};ST.sobres=p.sobres||{comprados:0};ST.regaladores=p.regaladores||[];ST.intercambios=p.intercambios||{recibidas:0,dadas:0,personas:[]};if(!ST.intercambios.personas)ST.intercambios.personas=[];if(typeof ST.sobres.regalados==='number')delete ST.sobres.regalados;}}
   }catch(e){showToast('Error al cargar',1);}
   renderAll();
 }
@@ -371,7 +395,7 @@ function renderAll(){
     document.getElementById('e-falt').textContent='-';
   }
 
-  renderAlbum();renderRegaladores();updateBadges();
+  renderAlbum();renderRegaladores();renderTlog();updateBadges();
   if(listaOpen.faltan)renderListaFaltan();
   if(listaOpen.rep)renderListaRep();
 }
@@ -857,6 +881,47 @@ let deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;document.getElementById('install-banner').style.display='flex';});
 document.getElementById('install-btn').addEventListener('click',async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();const r=await deferredPrompt.userChoice;if(r.outcome==='accepted')document.getElementById('install-banner').style.display='none';deferredPrompt=null;});
 if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('../sw.js').catch(()=>{}));}
+
+// ── TRADE LOG BY PERSON ───────────────────────────────────────────────────────
+function chgTlogInput(field,d){
+  if(field==='dadas'){tlogDadas=Math.max(0,tlogDadas+d);document.getElementById('tlog-dadas').textContent=tlogDadas;}
+  else{tlogRecibidas=Math.max(0,tlogRecibidas+d);document.getElementById('tlog-recibidas').textContent=tlogRecibidas;}
+}
+function agregarTlog(){
+  const inp=document.getElementById('tlog-nombre'),nombre=(inp.value||'').trim();
+  if(!nombre){inp.focus();showToast('Enter a name',1);return;}
+  if(tlogDadas===0&&tlogRecibidas===0){showToast('Enter at least 1 sticker given or received',1);return;}
+  const entrada={nombre,dadas:tlogDadas,recibidas:tlogRecibidas,fecha:new Date().toLocaleDateString('en-GB')};
+  ST.intercambios.personas.push(entrada);
+  ST.intercambios.dadas=(ST.intercambios.dadas||0)+tlogDadas;
+  ST.intercambios.recibidas=(ST.intercambios.recibidas||0)+tlogRecibidas;
+  inp.value='';tlogDadas=0;tlogRecibidas=0;
+  document.getElementById('tlog-dadas').textContent='0';
+  document.getElementById('tlog-recibidas').textContent='0';
+  save();renderTlog();renderAll();
+}
+function delTlog(idx){
+  const e=ST.intercambios.personas[idx];
+  ST.intercambios.dadas=Math.max(0,(ST.intercambios.dadas||0)-e.dadas);
+  ST.intercambios.recibidas=Math.max(0,(ST.intercambios.recibidas||0)-e.recibidas);
+  ST.intercambios.personas.splice(idx,1);
+  save();renderTlog();renderAll();
+}
+function renderTlog(){
+  const el=document.getElementById('tlog-list');if(!el)return;
+  const personas=ST.intercambios.personas||[];
+  if(!personas.length){el.innerHTML='<div class="empty-msg">No trades logged yet.</div>';return;}
+  const totD=personas.reduce((s,p)=>s+p.dadas,0),totR=personas.reduce((s,p)=>s+p.recibidas,0);
+  let h='<div class="reg-hdr"><span style="font-size:13px;font-weight:700;color:#111">'+personas.length+' trade'+(personas.length!==1?'s':'')+' logged</span><span style="font-size:12px;color:#888">gave '+totD+' · got '+totR+'</span></div>';
+  personas.slice().reverse().forEach((p,ri)=>{
+    const idx=personas.length-1-ri;
+    h+='<div class="reg-row"><div><div style="font-size:14px;font-weight:600;color:#111">'+esc(p.nombre)+'</div>'
+      +'<div style="font-size:11px;color:#aaa">'+p.fecha+'</div>'
+      +'<div style="font-size:12px;color:#555;margin-top:2px">gave <strong>'+p.dadas+'</strong> · got <strong>'+p.recibidas+'</strong></div></div>'
+      +'<button class="reg-del" onclick="delTlog('+idx+')">✕</button></div>';
+  });
+  el.innerHTML=h;
+}
 
 load();
 </script>
