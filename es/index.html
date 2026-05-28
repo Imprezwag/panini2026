@@ -152,7 +152,7 @@
         <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
       </div>
       <div class="sgrid">
-        <div class="scard"><div class="slbl">Tengo</div><div class="sval" id="s-tengo">0</div><div class="ssub">de 993 figuritas</div></div>
+        <div class="scard"><div class="slbl">Tengo</div><div class="sval" id="s-tengo">0</div><div class="ssub">de 994 figuritas</div></div>
         <div class="scard"><div class="slbl">Me faltan</div><div class="sval" id="s-faltan">993</div><div class="ssub">figuritas</div></div>
         <div class="scard"><div class="slbl">Repetidas</div><div class="sval" id="s-rep">0</div><div class="ssub">total</div></div>
         <div class="scard"><div class="slbl">Sels. completas</div><div class="sval" id="s-sels">0</div><div class="ssub">de 48</div></div>
@@ -970,6 +970,23 @@ function renderTlog(){
   });
   el.innerHTML=h;
 }
+
+// Swipe entre tabs
+(function(){
+  const TABS=['stats','album','listas','sobres'];
+  let x0=null;
+  document.addEventListener('touchstart',e=>{x0=e.touches[0].clientX;},{passive:true});
+  document.addEventListener('touchend',e=>{
+    if(x0===null)return;
+    const dx=e.changedTouches[0].clientX-x0;
+    x0=null;
+    if(Math.abs(dx)<50)return;
+    const cur=TABS.indexOf(document.querySelector('.tab.active')?.getAttribute('onclick')?.match(/'(\w+)'/)?.[1]);
+    if(cur===-1)return;
+    const next=dx<0?TABS[cur+1]:TABS[cur-1];
+    if(next)setTab(next);
+  },{passive:true});
+})();
 
 load();
 </script>
