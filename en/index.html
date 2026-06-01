@@ -325,6 +325,8 @@
 
 <script>
 const SELS=['MEX','RSA','KOR','CZE','CAN','BIH','QAT','SUI','BRA','MAR','HAI','SCO','USA','PAR','AUS','TUR','GER','CUW','CIV','ECU','NED','JPN','SWE','TUN','BEL','EGY','IRN','NZL','ESP','CPV','KSA','URU','FRA','SEN','IRQ','NOR','ARG','ALG','AUT','JOR','POR','COD','UZB','COL','ENG','CRO','GHA','PAN'];
+
+const PAGE_MAP={MEX:8,RSA:10,KOR:12,CZE:16,CAN:16,BIH:18,QAT:20,SUI:22,BRA:24,MAR:26,HAI:28,SCO:30,USA:32,PAR:34,AUS:36,TUR:38,GER:40,CUW:42,CIV:44,ECU:46,NED:48,JPN:50,SWE:52,TUN:54,BEL:58,EGY:60,IRN:62,NZL:64,ESP:66,CPV:68,KSA:70,URU:72,FRA:74,SEN:76,IRQ:78,NOR:80,ARG:82,ALG:84,AUT:86,JOR:88,POR:90,COD:92,UZB:94,COL:96,ENG:98,CRO:100,GHA:102,PAN:104};
 const NAMES={MEX:'🇲🇽 Mexico',RSA:'🇿🇦 South Africa',KOR:'🇰🇷 South Korea',CZE:'🇨🇿 Czech Republic',CAN:'🇨🇦 Canada',BIH:'🇧🇦 Bosnia & Herz.',QAT:'🇶🇦 Qatar',SUI:'🇨🇭 Switzerland',BRA:'🇧🇷 Brazil',MAR:'🇲🇦 Morocco',HAI:'🇭🇹 Haiti',SCO:'🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland',USA:'🇺🇸 United States',PAR:'🇵🇾 Paraguay',AUS:'🇦🇺 Australia',TUR:'🇹🇷 Türkiye',GER:'🇩🇪 Germany',CUW:'🇨🇼 Curaçao',CIV:'🇨🇮 Ivory Coast',ECU:'🇪🇨 Ecuador',NED:'🇳🇱 Netherlands',JPN:'🇯🇵 Japan',SWE:'🇸🇪 Sweden',TUN:'🇹🇳 Tunisia',BEL:'🇧🇪 Belgium',EGY:'🇪🇬 Egypt',IRN:'🇮🇷 Iran',NZL:'🇳🇿 New Zealand',ESP:'🇪🇸 Spain',CPV:'🇨🇻 Cape Verde',KSA:'🇸🇦 Saudi Arabia',URU:'🇺🇾 Uruguay',FRA:'🇫🇷 France',SEN:'🇸🇳 Senegal',IRQ:'🇮🇶 Iraq',NOR:'🇳🇴 Norway',ARG:'🇦🇷 Argentina',ALG:'🇩🇿 Algeria',AUT:'🇦🇹 Austria',JOR:'🇯🇴 Jordania',POR:'🇵🇹 Portugal',COD:'🇨🇩 DR Congo',UZB:'🇺🇿 Uzbekistan',COL:'🇨🇴 Colombia',ENG:'🏴󠁧󠁢󠁥󠁮󠁧󠁿 England',CRO:'🇭🇷 Croatia',GHA:'🇬🇭 Ghana',PAN:'🇵🇦 Panama',FWC:'🏆 FWC Football World Cup',CC:'🥤 Coca Cola'};
 const ALL_SELS=[...SELS,'FWC','CC'];
 // FWC: 20 figuritas numeradas 00-19 (índice 0=00, índice 1=1 ... 19=19)
@@ -483,8 +485,9 @@ function renderAlbum(){
     fs.forEach(sel=>{
       let cnt=0;for(let i=1;i<=SN;i++)if(ST.figs[kk(sel,i)])cnt++;
       const p=Math.round(cnt/SN*100),done=cnt===SN;
+      const pg=PAGE_MAP[sel]?'<span style="font-size:10px;color:#999">p. '+PAGE_MAP[sel]+'</span>':'';
       h+='<div class="selcard'+(done?' done':'')+'" onclick="openSel(\''+sel+'\')">'
-        +'<div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="selcode">'+sel+'</div><div class="selname">'+getName(sel)+'</div></div><span style="font-size:12px;color:#666">'+cnt+'/'+SN+'</span></div>'
+        +'<div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="selcode">'+sel+' '+pg+'</div><div class="selname">'+getName(sel)+'</div></div><span style="font-size:12px;color:#666">'+cnt+'/'+SN+'</span></div>'
         +'<div class="seltrack"><div class="selfill" style="width:'+p+'%"></div></div></div>';
     });
     h+='</div>';
@@ -689,10 +692,24 @@ function generarBloqueIntercambio(){
   const faltan=buildFaltantes(),reps=buildRepetidas();
   const linFaltan=faltan.map(({code,nums})=>code+':'+nums.join(',')).join(';');
   const linReps=reps.map(({code,items})=>code+':'+items.map(({num,cant})=>num+(cant>1?'x'+cant:'')).join(',')).join(';');
+  // WhatsApp-formatted version
+  let wapp='🌍 PANINI WORLD CUP 2026 ALBUM\n\n';
+  wapp+='❌ MISSING\n';
+  faltan.forEach(({code,nums})=>{
+    wapp+=NAMES[code]||code;
+    wapp+=': '+nums.join(', ')+'\n';
+  });
+  wapp+='\n✅ DUPLICATES\n';
+  reps.forEach(({code,items})=>{
+    wapp+=NAMES[code]||code;
+    wapp+=': '+items.map(({num,cant})=>num+(cant>1?'×'+cant:'')).join(', ')+'\n';
+  });
+  wapp+='\nGenerated with https://imprezwag.github.io/panini2026';
   const bloque='PANINI2026\nFALTAN:'+linFaltan+'\nREPITO:'+linReps;
   const ta=document.getElementById('ta-intercambio-out');
-  ta.value=bloque;ta.style.display='block';ta.select();
-  try{navigator.clipboard.writeText(bloque).then(()=>showToast('Lista copiada ✓')).catch(()=>showToast('Select and copy manually'));}
+  ta.value=wapp;ta.style.display='block';ta.select();
+  ta.dataset.raw=bloque;
+  try{navigator.clipboard.writeText(wapp).then(()=>showToast('Lista copiada ✓')).catch(()=>showToast('Select and copy manually'));}
   catch(e){try{document.execCommand('copy');showToast('Lista copiada ✓');}catch(_){showToast('Select and copy manually');}}
 }
 
