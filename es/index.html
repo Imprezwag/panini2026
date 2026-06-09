@@ -167,6 +167,12 @@
         <div class="est-row"><span class="est-lbl">Fig. nuevas por sobre</span><span id="e-prom">-</span></div>
         <div class="est-row"><span class="est-lbl">Sobres que faltan (est.)</span><span id="e-falt">-</span></div>
       </div>
+      <div class="sec">Probabilidad</div>
+      <div class="card">
+        <div class="est-row"><span class="est-lbl">Fig. nuevas/sobre (histórico)</span><span id="e-prom2">-</span></div>
+        <div class="est-row"><span class="est-lbl">Fig. nuevas/sobre (actual, prob.)</span><span id="e-prob-rate">-</span></div>
+        <div class="est-row"><span class="est-lbl">Sobres estimados (prob.)</span><span id="e-prob-sobres">-</span></div>
+      </div>
       <div class="sec">Backup</div>
       <div class="backup-card">
         <div class="backup-title">Exportar datos</div>
@@ -325,8 +331,6 @@
 
 <script>
 const SELS=['MEX','RSA','KOR','CZE','CAN','BIH','QAT','SUI','BRA','MAR','HAI','SCO','USA','PAR','AUS','TUR','GER','CUW','CIV','ECU','NED','JPN','SWE','TUN','BEL','EGY','IRN','NZL','ESP','CPV','KSA','URU','FRA','SEN','IRQ','NOR','ARG','ALG','AUT','JOR','POR','COD','UZB','COL','ENG','CRO','GHA','PAN'];
-
-const PAGE_MAP={MEX:8,RSA:10,KOR:12,CZE:16,CAN:16,BIH:18,QAT:20,SUI:22,BRA:24,MAR:26,HAI:28,SCO:30,USA:32,PAR:34,AUS:36,TUR:38,GER:40,CUW:42,CIV:44,ECU:46,NED:48,JPN:50,SWE:52,TUN:54,BEL:58,EGY:60,IRN:62,NZL:64,ESP:66,CPV:68,KSA:70,URU:72,FRA:74,SEN:76,IRQ:78,NOR:80,ARG:82,ALG:84,AUT:86,JOR:88,POR:90,COD:92,UZB:94,COL:96,ENG:98,CRO:100,GHA:102,PAN:104};
 const NAMES={MEX:'🇲🇽 México',RSA:'🇿🇦 Sudáfrica',KOR:'🇰🇷 Corea del Sur',CZE:'🇨🇿 Rep. Checa',CAN:'🇨🇦 Canadá',BIH:'🇧🇦 Bosnia y Herz.',QAT:'🇶🇦 Catar',SUI:'🇨🇭 Suiza',BRA:'🇧🇷 Brasil',MAR:'🇲🇦 Marruecos',HAI:'🇭🇹 Haití',SCO:'🏴󠁧󠁢󠁳󠁣󠁴󠁿 Escocia',USA:'🇺🇸 Estados Unidos',PAR:'🇵🇾 Paraguay',AUS:'🇦🇺 Australia',TUR:'🇹🇷 Türkiye',GER:'🇩🇪 Alemania',CUW:'🇨🇼 Curazao',CIV:'🇨🇮 Costa de Marfil',ECU:'🇪🇨 Ecuador',NED:'🇳🇱 Países Bajos',JPN:'🇯🇵 Japón',SWE:'🇸🇪 Suecia',TUN:'🇹🇳 Túnez',BEL:'🇧🇪 Bélgica',EGY:'🇪🇬 Egipto',IRN:'🇮🇷 Irán',NZL:'🇳🇿 Nueva Zelanda',ESP:'🇪🇸 España',CPV:'🇨🇻 Cabo Verde',KSA:'🇸🇦 Arabia Saudita',URU:'🇺🇾 Uruguay',FRA:'🇫🇷 Francia',SEN:'🇸🇳 Senegal',IRQ:'🇮🇶 Irak',NOR:'🇳🇴 Noruega',ARG:'🇦🇷 Argentina',ALG:'🇩🇿 Argelia',AUT:'🇦🇹 Austria',JOR:'🇯🇴 Jordania',POR:'🇵🇹 Portugal',COD:'🇨🇩 Congo (RD)',UZB:'🇺🇿 Uzbekistán',COL:'🇨🇴 Colombia',ENG:'🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra',CRO:'🇭🇷 Croacia',GHA:'🇬🇭 Ghana',PAN:'🇵🇦 Panamá',FWC:'🏆 FWC Football World Cup',CC:'🥤 Coca Cola'};
 const ALL_SELS=[...SELS,'FWC','CC'];
 // FWC: 20 figuritas numeradas 00-19 (índice 0=00, índice 1=1 ... 19=19)
@@ -395,6 +399,25 @@ function renderAll(){
   }else{
     document.getElementById('e-prom').textContent='-';
     document.getElementById('e-falt').textContent='-';
+  }
+  // Probabilistic stats
+  // 1. Historical rate (same as prom, shown in new section for clarity)
+  document.getElementById('e-prom2').textContent=prom?prom.toFixed(2)+' fig/sobre':'-';
+  // 2. Current expected new stickers per pack: (faltan/TOT)*7
+  const probRate=s.faltan>0?(s.faltan/TOT)*7:0;
+  document.getElementById('e-prob-rate').textContent=s.faltan>0?probRate.toFixed(2)+' fig/sobre':'0 (completo)';
+  // 3. Probabilistic packs estimate using coupon collector partial sum
+  // E[packs to get remaining r stickers from N total] = (N/7) * sum_{i=0}^{r-1} 1/(N-i)  ... in stickers terms:
+  // E[stickers] = N * sum_{i=N-r}^{N-1} 1/i  (harmonic partial sum), then divide by 7
+  if(s.faltan>0){
+    const N=TOT,r=s.faltan;
+    let harmSum=0;
+    for(let i=N-r+1;i<=N;i++) harmSum+=1/i;
+    const expStickers=N*harmSum;
+    const expSobres=Math.ceil(expStickers/7);
+    document.getElementById('e-prob-sobres').textContent=expSobres+' sobres (~'+Math.round(expStickers)+' fig)';
+  }else{
+    document.getElementById('e-prob-sobres').textContent='0 (completo)';
   }
 
   renderAlbum();renderRegaladores();renderTlog();updateBadges();
@@ -485,9 +508,8 @@ function renderAlbum(){
     fs.forEach(sel=>{
       let cnt=0;for(let i=1;i<=SN;i++)if(ST.figs[kk(sel,i)])cnt++;
       const p=Math.round(cnt/SN*100),done=cnt===SN;
-      const pg=PAGE_MAP[sel]?'<span style="font-size:10px;color:#999">pág. '+PAGE_MAP[sel]+'</span>':'';
       h+='<div class="selcard'+(done?' done':'')+'" onclick="openSel(\''+sel+'\')">'
-        +'<div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="selcode">'+sel+' '+pg+'</div><div class="selname">'+getName(sel)+'</div></div><span style="font-size:12px;color:#666">'+cnt+'/'+SN+'</span></div>'
+        +'<div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="selcode">'+sel+'</div><div class="selname">'+getName(sel)+'</div></div><span style="font-size:12px;color:#666">'+cnt+'/'+SN+'</span></div>'
         +'<div class="seltrack"><div class="selfill" style="width:'+p+'%"></div></div></div>';
     });
     h+='</div>';
@@ -695,26 +717,10 @@ function generarBloqueIntercambio(){
   const faltan=buildFaltantes(),reps=buildRepetidas();
   const linFaltan=faltan.map(({code,nums})=>code+':'+nums.join(',')).join(';');
   const linReps=reps.map(({code,items})=>code+':'+items.map(({num,cant})=>num+(cant>1?'x'+cant:'')).join(',')).join(';');
-  // WhatsApp-formatted version
-  let wapp='🌍 ÁLBUM PANINI MUNDIAL 2026\n\n';
-  wapp+='❌ ME FALTAN\n';
-  faltan.forEach(({code,nums})=>{
-    wapp+=NAMES[code]||code;
-    wapp+=': '+nums.join(', ')+'\n';
-  });
-  wapp+='\n✅ REPETIDAS\n';
-  reps.forEach(({code,items})=>{
-    wapp+=NAMES[code]||code;
-    wapp+=': '+items.map(({num,cant})=>num+(cant>1?'×'+cant:'')).join(', ')+'\n';
-  });
-  wapp+='\nGenerado con https://imprezwag.github.io/panini2026';
-  // Raw block (kept for cruzar function compatibility)
   const bloque='PANINI2026\nFALTAN:'+linFaltan+'\nREPITO:'+linReps;
   const ta=document.getElementById('ta-intercambio-out');
-  ta.value=wapp;ta.style.display='block';ta.select();
-  // Store raw block as data attribute for cruzarLista
-  ta.dataset.raw=bloque;
-  try{navigator.clipboard.writeText(wapp).then(()=>showToast('Lista copiada ✓')).catch(()=>showToast('Seleccioná y copiá manualmente'));}
+  ta.value=bloque;ta.style.display='block';ta.select();
+  try{navigator.clipboard.writeText(bloque).then(()=>showToast('Lista copiada ✓')).catch(()=>showToast('Seleccioná y copiá manualmente'));}
   catch(e){try{document.execCommand('copy');showToast('Lista copiada ✓');}catch(_){showToast('Seleccioná y copiá manualmente');}}
 }
 
