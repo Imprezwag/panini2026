@@ -171,6 +171,7 @@
       <div class="card">
         <div class="est-row"><span class="est-lbl">New stickers/pack (historical)</span><span id="e-prom2">-</span></div>
         <div class="est-row"><span class="est-lbl">New stickers/pack (current, prob.)</span><span id="e-prob-rate">-</span></div>
+        <div class="est-row"><span class="est-lbl">Chance of pulling a new one</span><span id="e-prob-pct">-</span></div>
         <div class="est-row"><span class="est-lbl">Packs needed (prob. estimate)</span><span id="e-prob-sobres">-</span></div>
       </div>
       <div class="sec">Backup</div>
@@ -404,10 +405,12 @@ function renderAll(){
   document.getElementById('e-prom2').textContent=prom?prom.toFixed(2)+' stickers/pack':'-';
   const probRate=s.faltan>0?(s.faltan/TOT)*7:0;
   document.getElementById('e-prob-rate').textContent=s.faltan>0?probRate.toFixed(2)+' stickers/pack':'0 (complete)';
+  const probPct=s.faltan>0?((s.faltan/TOT)*100):0;
+  document.getElementById('e-prob-pct').textContent=s.faltan>0?probPct.toFixed(1)+'% per sticker':'0% (complete)';
   if(s.faltan>0){
     const N=TOT,r=s.faltan;
     let harmSum=0;
-    for(let i=N-r+1;i<=N;i++) harmSum+=1/i;
+    for(let i=1;i<=r;i++) harmSum+=1/i;
     const expStickers=N*harmSum;
     const expSobres=Math.ceil(expStickers/7);
     document.getElementById('e-prob-sobres').textContent=expSobres+' packs (~'+Math.round(expStickers)+' stickers)';
