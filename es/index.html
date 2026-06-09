@@ -171,6 +171,7 @@
       <div class="card">
         <div class="est-row"><span class="est-lbl">Fig. nuevas/sobre (histórico)</span><span id="e-prom2">-</span></div>
         <div class="est-row"><span class="est-lbl">Fig. nuevas/sobre (actual, prob.)</span><span id="e-prob-rate">-</span></div>
+        <div class="est-row"><span class="est-lbl">Prob. de sacar una nueva</span><span id="e-prob-pct">-</span></div>
         <div class="est-row"><span class="est-lbl">Sobres estimados (prob.)</span><span id="e-prob-sobres">-</span></div>
       </div>
       <div class="sec">Backup</div>
@@ -406,13 +407,15 @@ function renderAll(){
   // 2. Current expected new stickers per pack: (faltan/TOT)*7
   const probRate=s.faltan>0?(s.faltan/TOT)*7:0;
   document.getElementById('e-prob-rate').textContent=s.faltan>0?probRate.toFixed(2)+' fig/sobre':'0 (completo)';
+  const probPct=s.faltan>0?((s.faltan/TOT)*100):0;
+  document.getElementById('e-prob-pct').textContent=s.faltan>0?probPct.toFixed(1)+'% por figurita':'0% (completo)';
   // 3. Probabilistic packs estimate using coupon collector partial sum
   // E[packs to get remaining r stickers from N total] = (N/7) * sum_{i=0}^{r-1} 1/(N-i)  ... in stickers terms:
   // E[stickers] = N * sum_{i=N-r}^{N-1} 1/i  (harmonic partial sum), then divide by 7
   if(s.faltan>0){
     const N=TOT,r=s.faltan;
     let harmSum=0;
-    for(let i=N-r+1;i<=N;i++) harmSum+=1/i;
+    for(let i=1;i<=r;i++) harmSum+=1/i;
     const expStickers=N*harmSum;
     const expSobres=Math.ceil(expStickers/7);
     document.getElementById('e-prob-sobres').textContent=expSobres+' sobres (~'+Math.round(expStickers)+' fig)';
