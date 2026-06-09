@@ -1,4 +1,4 @@
-const CACHE = 'panini2026-v10';
+const CACHE = 'panini2026-v11';
 const FILES = [
   '/panini2026/',
   '/panini2026/index.html',
